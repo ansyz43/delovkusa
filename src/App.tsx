@@ -1,0 +1,106 @@
+import { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedCourseRoute from "./components/ProtectedCourseRoute";
+
+// Используем ленивую загрузку для компонентов страниц
+const CakeShop = lazy(() => import("./components/CakeShop"));
+const Home = lazy(() => import("./components/home"));
+const CourseDetail = lazy(() => import("./components/CourseDetail"));
+const FinishingCreamCourse = lazy(
+  () => import("./components/FinishingCreamCourse"),
+);
+const FlowerVaseCourse = lazy(() => import("./components/FlowerVaseCourse"));
+const OstrovCourse = lazy(() => import("./components/OstrovCourse"));
+const PlasticChocolateCourse = lazy(() => import("./components/PlasticChocolateCourse"));
+const AuthPage = lazy(() => import("./components/AuthPage"));
+const Dashboard = lazy(() => import("./components/Dashboard"));
+const DashboardCourses = lazy(() => import("./components/DashboardCourses"));
+const CourseLesson = lazy(() => import("./components/CourseLesson"));
+const RoseCourseLesson = lazy(() => import("./components/RoseCourseLesson"));
+const OstrovCourseLesson = lazy(() => import("./components/OstrovCourseLesson"));
+const VaseCourseLesson = lazy(() => import("./components/VaseCourseLesson"));
+const PlasticChocolateCourseLesson = lazy(() => import("./components/PlasticChocolateCourseLesson"));
+const PaymentReturn = lazy(() => import("./components/PaymentReturn"));
+
+function App() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen bg-white">
+          Загрузка...
+        </div>
+      }
+    >
+      <Routes>
+        <Route path="/" element={<CakeShop />} />
+        <Route path="/courses" element={<Home />} />
+        <Route path="/courses/roses" element={<CourseDetail />} />
+        <Route path="/courses/cream" element={<FinishingCreamCourse />} />
+        <Route path="/courses/vase" element={<FlowerVaseCourse />} />
+        <Route path="/courses/ostrov" element={<OstrovCourse />} />
+        <Route path="/courses/plastic-chocolate" element={<PlasticChocolateCourse />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/payment/return" element={<PaymentReturn />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/courses"
+          element={
+            <ProtectedRoute>
+              <DashboardCourses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/courses/cream/learn"
+          element={
+            <ProtectedCourseRoute courseId="cream">
+              <CourseLesson />
+            </ProtectedCourseRoute>
+          }
+        />
+        <Route
+          path="/dashboard/courses/roses/learn"
+          element={
+            <ProtectedCourseRoute courseId="roses">
+              <RoseCourseLesson />
+            </ProtectedCourseRoute>
+          }
+        />
+        <Route
+          path="/dashboard/courses/ostrov/learn"
+          element={
+            <ProtectedCourseRoute courseId="ostrov">
+              <OstrovCourseLesson />
+            </ProtectedCourseRoute>
+          }
+        />
+        <Route
+          path="/dashboard/courses/vase/learn"
+          element={
+            <ProtectedCourseRoute courseId="vase">
+              <VaseCourseLesson />
+            </ProtectedCourseRoute>
+          }
+        />
+        <Route
+          path="/dashboard/courses/plastic-chocolate/learn"
+          element={
+            <ProtectedCourseRoute courseId="plastic-chocolate">
+              <PlasticChocolateCourseLesson />
+            </ProtectedCourseRoute>
+          }
+        />
+      </Routes>
+    </Suspense>
+  );
+}
+
+export default App;

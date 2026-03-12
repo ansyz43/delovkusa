@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Дело Вкуса - Кондитерские курсы</title>
+    <!-- Предзагрузка ключевых изображений с высоким приоритетом -->
+    <link rel="preload" href="roza1.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="roza2.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="roza3.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="roza4.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="cre1.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="cre2.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="cre3.jpg" as="image" fetchpriority="high" />
+    <!-- Предзагрузка стилей для быстрого рендеринга -->
+    <link rel="preload" href="/src/index.css" as="style" />
+    <!-- Добавляем стили для предзагрузки изображений -->
+    <style>
+      .bg-preload {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -9999;
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Предзагрузка фоновых изображений через скрытые элементы -->
+    <div class="bg-preload">
+      <img src="roza1.jpg" alt="" />
+      <img src="roza2.jpg" alt="" />
+      <img src="roza3.jpg" alt="" />
+      <img src="roza4.jpg" alt="" />
+      <img src="cre1.jpg" alt="" />
+      <img src="cre2.jpg" alt="" />
+      <img src="cre3.jpg" alt="" />
+    </div>
+    <div id="root"></div>
+    <script>
+      // Немедленная предзагрузка изображений
+      window.addEventListener("DOMContentLoaded", () => {
+        const imagesToPreload = [
+          "roza1.jpg",
+          "roza2.jpg",
+          "roza3.jpg",
+          "roza4.jpg",
+          "cre1.jpg",
+          "cre2.jpg",
+          "cre3.jpg",
+        ];
+
+        imagesToPreload.forEach((src) => {
+          const img = new Image();
+          img.src = src;
+        });
+      });
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+    
+  </body>
+</html>
