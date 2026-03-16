@@ -17,8 +17,6 @@ interface AuthContextType {
   isAdmin: boolean;
   signUp: (email: string, password: string, name?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signInWithPhone: (phone: string) => Promise<{ error: any }>;
-  verifyOtp: (phone: string, token: string) => Promise<{ error: any }>;
   loginWithGoogle: (credential: string) => Promise<void>;
   loginWithTelegram: (tgData: any) => Promise<void>;
   signOut: () => Promise<void>;
@@ -104,32 +102,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [loadProfile]);
 
-  // SMS via Supabase (remains as-is)
-  const signInWithPhone = useCallback(async (phone: string) => {
-    const { error } = await supabase.auth.signInWithOtp({ phone });
-    return { error };
-  }, []);
-
-  const verifyOtp = useCallback(async (phone: string, token: string) => {
-    const { error } = await supabase.auth.verifyOtp({ phone, token, type: "sms" });
-    if (!error) {
-      // On successful phone auth, also set a local user so ProtectedRoute works
-      const session = await supabase.auth.getSession();
-      const sUser = session.data.session?.user;
-      if (sUser) {
-        setUser({
-          id: sUser.id,
-          email: sUser.email || sUser.phone || "",
-          name: sUser.user_metadata?.full_name || sUser.phone || "Пользователь",
-          is_admin: false,
-          auth_provider: "phone",
-          created_at: sUser.created_at,
-        });
-      }
-    }
-    return { error };
-  }, []);
-
   const loginWithGoogle = useCallback(async (credential: string) => {
     const resp = await apiFetch("/api/auth/google", {
       method: "POST",
@@ -172,8 +144,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAdmin = user?.is_admin ?? false;
 
   const value = useMemo(() => ({
-    user, loading, isAdmin, signUp, signIn, signInWithPhone, verifyOtp, loginWithGoogle, loginWithTelegram, signOut,
-  }), [user, loading, isAdmin, signUp, signIn, signInWithPhone, verifyOtp, loginWithGoogle, loginWithTelegram, signOut]);
+    user, loading, isAdmin, signUp, signIn, loginWithGoogle, loginWithTelegram, signOut,
+  }), [user, loading, isAdmin, signUp, signIn, loginWithGoogle, loginWithTelegram, signOut]);
 
   return (
     <AuthContext.Provider value={value}>

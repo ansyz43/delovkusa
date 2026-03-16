@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Mail, Lock, User, ArrowLeft, Eye, EyeOff, Phone, KeyRound } from "lucide-react";
+import { Mail, Lock, User, ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 declare global {
   interface Window {
@@ -27,14 +27,11 @@ declare global {
   }
 }
 
-type AuthMethod = "email" | "phone";
-
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
 const TELEGRAM_BOT_NAME = import.meta.env.VITE_TELEGRAM_BOT_NAME as string | undefined;
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [authMethod, setAuthMethod] = useState<AuthMethod>("email");
 
   // Email fields
   const [email, setEmail] = useState("");
@@ -42,16 +39,11 @@ const AuthPage = () => {
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Phone fields
-  const [phone, setPhone] = useState("+7");
-  const [otpCode, setOtpCode] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { signIn, signUp, signInWithPhone, verifyOtp, loginWithGoogle, loginWithTelegram } = useAuth();
+  const { signIn, signUp, loginWithGoogle, loginWithTelegram } = useAuth();
   const navigate = useNavigate();
   const googleBtnRef = useRef<HTMLDivElement>(null);
 
@@ -150,82 +142,6 @@ const AuthPage = () => {
     }, 500);
   }, [loginWithTelegram, navigate]);
 
-  const formatPhoneDisplay = (value: string) => {
-    let digits = value.replace(/[^\d+]/g, "");
-    if (!digits.startsWith("+")) digits = "+" + digits;
-    return digits;
-  };
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneDisplay(e.target.value);
-    setPhone(formatted);
-  };
-
-  // Отправка SMS-кода
-  const handleSendOtp = async () => {
-    setError("");
-    setSuccess("");
-    setLoading(true);
-
-    const cleanPhone = phone.replace(/[^\d+]/g, "");
-    if (!cleanPhone.match(/^\+7\d{10}$/)) {
-      setError("Введите корректный номер в формате +7XXXXXXXXXX");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const { error } = await signInWithPhone(cleanPhone);
-      if (error) {
-        if (error.message.includes("not enabled")) {
-          setError("SMS-авторизация не настроена. Обратитесь к администратору.");
-        } else {
-          setError(error.message);
-        }
-      } else {
-        setOtpSent(true);
-        setSuccess("SMS-код отправлен на " + cleanPhone);
-      }
-    } catch (err) {
-      setError("Ошибка отправки SMS. Попробуйте позже.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Подтверждение SMS-кода
-  const handleVerifyOtp = async () => {
-    setError("");
-    setSuccess("");
-    setLoading(true);
-
-    if (!otpCode || otpCode.length < 6) {
-      setError("Введите 6-значный код из SMS");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const cleanPhone = phone.replace(/[^\d+]/g, "");
-      const { error } = await verifyOtp(cleanPhone, otpCode);
-      if (error) {
-        if (error.message.includes("expired")) {
-          setError("Код истёк. Запросите новый.");
-        } else if (error.message.includes("invalid")) {
-          setError("Неверный код.");
-        } else {
-          setError(error.message);
-        }
-      } else {
-        navigate("/dashboard");
-      }
-    } catch (err) {
-      setError("Ошибка проверки кода.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Вход/регистрация по Email
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,8 +200,6 @@ const AuthPage = () => {
   const resetState = () => {
     setError("");
     setSuccess("");
-    setOtpSent(false);
-    setOtpCode("");
   };
 
   return (
@@ -308,18 +222,12 @@ const AuthPage = () => {
                 <User className="w-8 h-8 text-pink-600" />
               </div>
               <CardTitle className="text-2xl font-bold text-gray-800">
-                {authMethod === "phone"
-                  ? "Вход по телефону"
-                  : isLogin
-                    ? "Вход в аккаунт"
-                    : "Регистрация"}
+                {isLogin ? "Вход в аккаунт" : "Регистрация"}
               </CardTitle>
               <CardDescription className="text-gray-500">
-                {authMethod === "phone"
-                  ? "Введите номер телефона для получения SMS-кода"
-                  : isLogin
-                    ? "Войдите, чтобы получить доступ к личному кабинету"
-                    : "Создайте аккаунт для доступа к курсам"}
+                {isLogin
+                  ? "Войдите, чтобы получить доступ к личному кабинету"
+                  : "Создайте аккаунт для доступа к курсам"}
               </CardDescription>
             </CardHeader>
 
@@ -356,133 +264,8 @@ const AuthPage = () => {
                 </div>
               )}
 
-              {/* Переключатель: Email / Телефон */}
-              <div className="flex rounded-lg bg-gray-100 p-1 mb-6">
-                <button
-                  type="button"
-                  onClick={() => { setAuthMethod("email"); resetState(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-medium transition-all ${
-                    authMethod === "email"
-                      ? "bg-white text-pink-600 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <Mail className="w-4 h-4" />
-                  Email
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setAuthMethod("phone"); resetState(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-medium transition-all ${
-                    authMethod === "phone"
-                      ? "bg-white text-pink-600 shadow-sm"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <Phone className="w-4 h-4" />
-                  Телефон
-                </button>
-              </div>
-
-              {/* ===== ВХОД ПО ТЕЛЕФОНУ ===== */}
-              {authMethod === "phone" && (
-                <div className="space-y-4">
-                  {!otpSent ? (
-                    <>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-gray-700 font-medium">
-                          Номер телефона
-                        </Label>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <Input
-                            id="phone"
-                            type="tel"
-                            placeholder="+7 999 123 45 67"
-                            value={phone}
-                            onChange={handlePhoneChange}
-                            className="pl-10 h-11 text-lg tracking-wider"
-                            maxLength={15}
-                          />
-                        </div>
-                        <p className="text-xs text-gray-400">
-                          Формат: +7XXXXXXXXXX (Россия)
-                        </p>
-                      </div>
-
-                      {error && (
-                        <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-200">
-                          {error}
-                        </div>
-                      )}
-
-                      <Button
-                        type="button"
-                        onClick={handleSendOtp}
-                        disabled={loading}
-                        className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white font-semibold"
-                      >
-                        {loading ? "Отправка..." : "Получить SMS-код"}
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <div className="bg-green-50 text-green-700 text-sm p-3 rounded-lg border border-green-200 mb-2">
-                        SMS-код отправлен на <strong>{phone}</strong>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="otp" className="text-gray-700 font-medium">
-                          Код из SMS
-                        </Label>
-                        <div className="relative">
-                          <KeyRound className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <Input
-                            id="otp"
-                            type="text"
-                            inputMode="numeric"
-                            placeholder="123456"
-                            value={otpCode}
-                            onChange={(e) =>
-                              setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))
-                            }
-                            className="pl-10 h-11 text-xl tracking-[0.5em] text-center font-mono"
-                            maxLength={6}
-                            autoFocus
-                          />
-                        </div>
-                      </div>
-
-                      {error && (
-                        <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-200">
-                          {error}
-                        </div>
-                      )}
-
-                      <Button
-                        type="button"
-                        onClick={handleVerifyOtp}
-                        disabled={loading}
-                        className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white font-semibold"
-                      >
-                        {loading ? "Проверка..." : "Подтвердить"}
-                      </Button>
-
-                      <button
-                        type="button"
-                        onClick={() => { setOtpSent(false); setOtpCode(""); setError(""); setSuccess(""); }}
-                        className="w-full text-center text-sm text-gray-500 hover:text-pink-600 mt-2"
-                      >
-                        Изменить номер или отправить код повторно
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
-
               {/* ===== ВХОД ПО EMAIL ===== */}
-              {authMethod === "email" && (
-                <form onSubmit={handleEmailSubmit} className="space-y-4">
+              <form onSubmit={handleEmailSubmit} className="space-y-4">
                   {!isLogin && (
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-gray-700 font-medium">
@@ -576,7 +359,6 @@ const AuthPage = () => {
                     </p>
                   </div>
                 </form>
-              )}
             </CardContent>
           </Card>
         </div>
