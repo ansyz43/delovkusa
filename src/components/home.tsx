@@ -187,6 +187,7 @@ const Home = () => {
                     <a
                       href="/courses/roses"
                       className="inline-flex items-center text-pink-600 font-medium hover:text-pink-800 transition-colors cursor-pointer"
+                      onMouseEnter={() => import("./CourseDetail")}
                       onClick={() => (window.location.href = "/courses/roses")}
                     >
                       Подробнее
@@ -224,6 +225,7 @@ const Home = () => {
                     <a
                       href="/courses/cream"
                       className="inline-flex items-center text-pink-600 font-medium hover:text-pink-800 transition-colors cursor-pointer"
+                      onMouseEnter={() => import("./FinishingCreamCourse")}
                       onClick={() => (window.location.href = "/courses/cream")}
                     >
                       Подробнее
@@ -261,6 +263,7 @@ const Home = () => {
                     <a
                       href="/courses/vase"
                       className="inline-flex items-center text-pink-600 font-medium hover:text-pink-800 transition-colors cursor-pointer"
+                      onMouseEnter={() => import("./FlowerVaseCourse")}
                       onClick={() => (window.location.href = "/courses/vase")}
                     >
                       Подробнее
@@ -298,6 +301,7 @@ const Home = () => {
                     <a
                       href="/courses/ostrov"
                       className="inline-flex items-center text-pink-600 font-medium hover:text-pink-800 transition-colors cursor-pointer"
+                      onMouseEnter={() => import("./OstrovCourse")}
                       onClick={() => (window.location.href = "/courses/ostrov")}
                     >
                       Подробнее
@@ -334,6 +338,7 @@ const Home = () => {
                     <a
                       href="/courses/plastic-chocolate"
                       className="inline-flex items-center text-pink-600 font-medium hover:text-pink-800 transition-colors cursor-pointer"
+                      onMouseEnter={() => import("./PlasticChocolateCourse")}
                       onClick={() => (window.location.href = "/courses/plastic-chocolate")}
                     >
                       Подробнее

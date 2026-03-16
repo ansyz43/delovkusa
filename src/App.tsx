@@ -29,8 +29,9 @@ function App() {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center h-screen bg-white">
-          Загрузка...
+        <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-pink-50 to-white">
+          <div className="w-10 h-10 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin" />
+          <p className="mt-4 text-sm text-gray-400">Загрузка...</p>
         </div>
       }
     >
