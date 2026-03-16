@@ -715,6 +715,10 @@ const Home = () => {
             <p>
               &copy; {new Date().getFullYear()} Дело Вкуса. Все права защищены.
             </p>
+            <p className="mt-2">ИНН 253615143415</p>
+            <p className="mt-2">
+              <a href="/offer" className="text-gray-400 hover:text-white transition-colors underline">Публичная оферта</a>
+            </p>
           </div>
         </div>
       </footer>

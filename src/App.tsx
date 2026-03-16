@@ -22,6 +22,7 @@ const OstrovCourseLesson = lazy(() => import("./components/OstrovCourseLesson"))
 const VaseCourseLesson = lazy(() => import("./components/VaseCourseLesson"));
 const PlasticChocolateCourseLesson = lazy(() => import("./components/PlasticChocolateCourseLesson"));
 const PaymentReturn = lazy(() => import("./components/PaymentReturn"));
+const PublicOffer = lazy(() => import("./components/PublicOffer"));
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/courses/plastic-chocolate" element={<PlasticChocolateCourse />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/payment/return" element={<PaymentReturn />} />
+        <Route path="/offer" element={<PublicOffer />} />
         <Route
           path="/dashboard"
           element={

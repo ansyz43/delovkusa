@@ -106,16 +106,11 @@ const OstrovCourse = ({
           </div>
 
           <div className="rounded-xl overflow-hidden shadow-lg">
-            <div className="relative pb-[56.25%] h-0 overflow-hidden">
-              <video
-                className="absolute top-0 left-0 w-full h-full object-cover"
-                controls
-                poster={image}
-              >
-                <source src="/video ostrov.mp4" type="video/mp4" />
-                Ваш браузер не поддерживает видео.
-              </video>
-            </div>
+            <img
+              src={image}
+              alt="Торт Остров — результат курса"
+              className="w-full h-auto object-cover"
+            />
             <ZoomableGallery
               images={[
                 { src: "/ostrov.jpg", alt: "Торт Остров 1" },

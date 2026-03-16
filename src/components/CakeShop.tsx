@@ -402,7 +402,11 @@ const CakeShop = () => {
       <footer className="bg-gray-900 text-white py-10 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-gray-400 font-light">
-            © 2026 Дело Вкуса. Авторские торты. Все права защищены.
+            © {new Date().getFullYear()} Дело Вкуса. Авторские торты. Все права защищены.
+          </p>
+          <p className="text-gray-400 font-light mt-2">ИНН 253615143415</p>
+          <p className="mt-2">
+            <a href="/offer" className="text-gray-400 hover:text-white transition-colors underline font-light">Публичная оферта</a>
           </p>
         </div>
       </footer>

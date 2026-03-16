@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 const Header = ({
-  logo = "/vite.svg",
+  logo = "/logo.png",
   navLinks = [
     { label: "Главная", href: "/" },
     { label: "Каталог тортов", href: "/#catalog" },
