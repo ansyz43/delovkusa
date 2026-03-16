@@ -13,16 +13,16 @@ COURSES = [
 ]
 
 TECHCARDS = [
-    {"id": "tc-chereshnevyj-tryufel", "title": "Черешневый трюфель", "price": 500, "product_type": "techcard", "file_path": "Chereshnevyj-tryufel.pdf"},
-    {"id": "tc-chereshnevye-tryufeli-mk", "title": "Изысканные черешневые трюфели (мастер-класс)", "price": 700, "product_type": "techcard", "file_path": "Izyskannye-Chereshnevye-Tryufeli-Master-klass.pdf"},
-    {"id": "tc-plastichnyj-shokolad", "title": "Рецепт пластичного шоколада", "price": 400, "product_type": "techcard", "file_path": "Recept-plastichnogo-shokolada.pdf"},
-    {"id": "tc-shifonovyj-biskvit", "title": "Шоколадный шифоновый бисквит", "price": 400, "product_type": "techcard", "file_path": "Shokoladnyj-shifonovyj-biskvit.pdf"},
-    {"id": "tc-tart-yagoda", "title": "Тарт и кольца со свежей ягодой", "price": 600, "product_type": "techcard", "file_path": "Tart-i-kolca-so-svezhej-yagodoj.pdf"},
-    {"id": "tc-chernichnye-nochi", "title": "Торт «Черничные ночи»", "price": 500, "product_type": "techcard", "file_path": "Tort-chernichnye-nochi-Recept.pdf"},
-    {"id": "tc-tayozhnyj-roman", "title": "Торт «Таёжный роман»", "price": 500, "product_type": "techcard", "file_path": "Tort-Tayozhnyj-roman.pdf"},
-    {"id": "tc-vishnya-v-shokolade", "title": "Торт «Вишня в шоколаде»", "price": 500, "product_type": "techcard", "file_path": "tort-vishnya-v-shokolade.pdf"},
-    {"id": "tc-tryufel-chernosliv", "title": "Трюфель «Чернослив-кедровый орех»", "price": 500, "product_type": "techcard", "file_path": "Tryufel-Chernoslivkedrovyj-oreh.pdf"},
-    {"id": "tc-tryufel-malinovyj", "title": "Трюфель «Малиновый шоколад»", "price": 500, "product_type": "techcard", "file_path": "Tryufel-Malinovyj-shokolad.pdf"},
+    {"id": "tc-chereshnevyj-tryufel", "title": "Черешневый трюфель", "price": 1500, "product_type": "techcard", "file_path": "Chereshnevyj-tryufel.pdf"},
+    {"id": "tc-chereshnevye-tryufeli-mk", "title": "Изысканные черешневые трюфели (мастер-класс)", "price": 1500, "product_type": "techcard", "file_path": "Izyskannye-Chereshnevye-Tryufeli-Master-klass.pdf"},
+    {"id": "tc-plastichnyj-shokolad", "title": "Рецепт пластичного шоколада", "price": 1500, "product_type": "techcard", "file_path": "Recept-plastichnogo-shokolada.pdf"},
+    {"id": "tc-shifonovyj-biskvit", "title": "Шоколадный шифоновый бисквит", "price": 1500, "product_type": "techcard", "file_path": "Shokoladnyj-shifonovyj-biskvit.pdf"},
+    {"id": "tc-tart-yagoda", "title": "Тарт и кольца со свежей ягодой", "price": 1500, "product_type": "techcard", "file_path": "Tart-i-kolca-so-svezhej-yagodoj.pdf"},
+    {"id": "tc-chernichnye-nochi", "title": "Торт «Черничные ночи»", "price": 1500, "product_type": "techcard", "file_path": "Tort-chernichnye-nochi-Recept.pdf"},
+    {"id": "tc-tayozhnyj-roman", "title": "Торт «Таёжный роман»", "price": 1500, "product_type": "techcard", "file_path": "Tort-Tayozhnyj-roman.pdf"},
+    {"id": "tc-vishnya-v-shokolade", "title": "Торт «Вишня в шоколаде»", "price": 1500, "product_type": "techcard", "file_path": "tort-vishnya-v-shokolade.pdf"},
+    {"id": "tc-tryufel-chernosliv", "title": "Трюфель «Чернослив-кедровый орех»", "price": 1500, "product_type": "techcard", "file_path": "Tryufel-Chernoslivkedrovyj-oreh.pdf"},
+    {"id": "tc-tryufel-malinovyj", "title": "Трюфель «Малиновый шоколад»", "price": 1500, "product_type": "techcard", "file_path": "Tryufel-Malinovyj-shokolad.pdf"},
 ]
 
 
