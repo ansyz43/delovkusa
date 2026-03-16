@@ -66,22 +66,22 @@ const YandexVideoPlayer: React.FC<{ url: string; title: string }> = ({ url, titl
     setError(null);
     setReady(false);
     setFallback(false);
-
-    if (isMobile) {
-      setLoading(false);
-      setFallback(true);
-      return;
-    }
-
     setLoading(true);
-    try {
-      const apiUrl = `https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=${encodeURIComponent(url)}`;
-      const resp = await fetch(apiUrl);
-      if (!resp.ok) throw new Error("Не удалось получить ссылку на видео");
-      const data = await resp.json();
-      if (!data.href) throw new Error("Скачивание запрещено владельцем файла");
 
-      const videoUrl = data.href.replace('disposition=attachment', 'disposition=inline');
+    try {
+      let videoUrl: string;
+
+      if (isMobile) {
+        videoUrl = `/api/courses/video-proxy?url=${encodeURIComponent(url)}`;
+      } else {
+        const apiUrl = `https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=${encodeURIComponent(url)}`;
+        const resp = await fetch(apiUrl);
+        if (!resp.ok) throw new Error("Не удалось получить ссылку на видео");
+        const data = await resp.json();
+        if (!data.href) throw new Error("Скачивание запрещено владельцем файла");
+        videoUrl = data.href.replace('disposition=attachment', 'disposition=inline');
+      }
+
       const video = videoRef.current;
       if (!video) return;
 
@@ -117,7 +117,7 @@ const YandexVideoPlayer: React.FC<{ url: string; title: string }> = ({ url, titl
           setLoading(false);
           setFallback(true);
         }
-      }, 10000);
+      }, 15000);
     } catch (e: any) {
       setError(e.message || "Ошибка загрузки видео");
       setLoading(false);

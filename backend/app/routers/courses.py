@@ -1,6 +1,9 @@
 import os
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import FileResponse
+from urllib.parse import urlparse
+
+import httpx
+from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -97,4 +100,65 @@ async def download_techcard(
         file_path,
         media_type="application/pdf",
         filename=course.file_path,
+    )
+
+
+_ALLOWED_HOSTS = {"disk.yandex.ru", "yadi.sk"}
+
+
+@router.get("/video-proxy")
+async def video_proxy(url: str, request: Request):
+    """Stream video from Yandex Disk with inline headers for mobile playback."""
+    parsed = urlparse(url)
+    if not parsed.hostname or parsed.hostname not in _ALLOWED_HOSTS:
+        raise HTTPException(status_code=400, detail="Недопустимый URL")
+
+    # Get download link from Yandex Disk API
+    async with httpx.AsyncClient(timeout=15) as api_client:
+        api_resp = await api_client.get(
+            "https://cloud-api.yandex.net/v1/disk/public/resources/download",
+            params={"public_key": url},
+        )
+        if api_resp.status_code != 200:
+            raise HTTPException(status_code=502, detail="Не удалось получить ссылку")
+        download_url = api_resp.json().get("href")
+        if not download_url:
+            raise HTTPException(status_code=502, detail="Скачивание запрещено")
+
+    # Forward Range header for seeking
+    fwd_headers = {}
+    range_header = request.headers.get("range")
+    if range_header:
+        fwd_headers["Range"] = range_header
+
+    client = httpx.AsyncClient(
+        timeout=httpx.Timeout(connect=15, read=300, write=30, pool=15),
+        follow_redirects=True,
+    )
+    req = client.build_request("GET", download_url, headers=fwd_headers)
+    resp = await client.send(req, stream=True)
+
+    async def _stream():
+        try:
+            async for chunk in resp.aiter_bytes(chunk_size=65536):
+                yield chunk
+        finally:
+            await resp.aclose()
+            await client.aclose()
+
+    out_headers = {
+        "Content-Type": resp.headers.get("Content-Type", "video/mp4"),
+        "Accept-Ranges": "bytes",
+        "Content-Disposition": "inline",
+        "Cache-Control": "public, max-age=3600",
+    }
+    if "Content-Length" in resp.headers:
+        out_headers["Content-Length"] = resp.headers["Content-Length"]
+    if "Content-Range" in resp.headers:
+        out_headers["Content-Range"] = resp.headers["Content-Range"]
+
+    return StreamingResponse(
+        _stream(),
+        status_code=resp.status_code,
+        headers=out_headers,
     )
