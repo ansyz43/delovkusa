@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,8 +11,9 @@ from slowapi.errors import RateLimitExceeded
 from app.config import settings
 from app.database import engine, Base
 from app.routers import auth, payments, courses
+from app.logging_config import setup_logging
 
-logging.basicConfig(level=logging.INFO)
+setup_logging()
 logger = logging.getLogger(__name__)
 
 # Fail fast if SECRET_KEY is the default placeholder
@@ -43,6 +45,38 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 app.add_middleware(SecurityHeadersMiddleware)
+
+
+# --- Request logging middleware ---
+class RequestLoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        start = time.time()
+        client = request.client.host if request.client else "unknown"
+        try:
+            response: Response = await call_next(request)
+            elapsed = round((time.time() - start) * 1000)
+            logger.info(
+                "%s %s %s %dms %s",
+                request.method,
+                request.url.path,
+                response.status_code,
+                elapsed,
+                client,
+            )
+            return response
+        except Exception as exc:
+            elapsed = round((time.time() - start) * 1000)
+            logger.error(
+                "%s %s ERROR %dms %s — %s",
+                request.method,
+                request.url.path,
+                elapsed,
+                client,
+                str(exc),
+            )
+            raise
+
+app.add_middleware(RequestLoggingMiddleware)
 
 # Rate limiter
 from app.routers.auth import limiter
