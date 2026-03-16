@@ -551,6 +551,9 @@ const OstrovCourseLesson: React.FC = () => {
     setContentKey((k) => k + 1);
     const mod = courseModules.find((m) => m.items.some((i) => i.id === item.id));
     if (mod) setOpenModuleId(mod.id);
+    setTimeout(() => {
+      contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const markComplete = (itemId: number) => {
@@ -667,7 +670,7 @@ const OstrovCourseLesson: React.FC = () => {
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Sidebar */}
             <div className="lg:w-80 xl:w-96 flex-shrink-0">
-              <div className="bg-white rounded-2xl shadow-md p-4 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+              <div className="bg-white rounded-2xl shadow-md p-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
                 <h3 className="font-semibold text-gray-700 mb-3 flex items-center gap-2 text-sm uppercase tracking-wide">
                   <BookOpen className="w-4 h-4" />
                   Содержание курса
