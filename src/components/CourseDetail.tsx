@@ -102,12 +102,12 @@ const CourseDetail = ({
           <div className="rounded-xl overflow-hidden shadow-lg">
             <ZoomableGallery
               images={[
-                { src: "/rozaroza (7).jpg", alt: "Роза 1" },
-                { src: "/rozaroza (6).jpg", alt: "Роза 2" },
-                { src: "/rozaroza (5).jpg", alt: "Роза 3" },
-                { src: "/rozaroza (4).jpg", alt: "Роза 4" },
-                { src: "/rozaroza (3).jpg", alt: "Роза 5" },
-                { src: "/rozaroza (1).jpg", alt: "Роза 6" },
+                { src: "/courses/roses/rozaroza (7).jpg", alt: "Роза 1" },
+                { src: "/courses/roses/rozaroza (6).jpg", alt: "Роза 2" },
+                { src: "/courses/roses/rozaroza (5).jpg", alt: "Роза 3" },
+                { src: "/courses/roses/rozaroza (4).jpg", alt: "Роза 4" },
+                { src: "/courses/roses/rozaroza (3).jpg", alt: "Роза 5" },
+                { src: "/courses/roses/rozaroza (1).jpg", alt: "Роза 6" },
                 {
                   src: "/roza roza  (3).jpg",
                   alt: "Розовая роза 7",
@@ -209,7 +209,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/otziv roza  (1).jpg"
+                src="/courses/roses/otziv roza  (1).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -227,7 +227,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/otziv roza  (2).jpg"
+                src="/courses/roses/otziv roza  (2).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -245,7 +245,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/otziv roza  (3).jpg"
+                src="/courses/roses/otziv roza  (3).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -263,7 +263,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/otziv roza  (4).jpg"
+                src="/courses/roses/otziv roza  (4).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -281,7 +281,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/home/peter/tempo-api/projects/cb1827ef-b44b-4a33-998b-b63e0dcedca0/otziv roza  (5).jpg"
+                src="/courses/roses/otziv roza  (5).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -299,7 +299,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/otziv roza  (6).jpg"
+                src="/courses/roses/otziv roza  (6).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -317,7 +317,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/otziv roza  (8).jpg"
+                src="/courses/roses/otziv roza  (8).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -335,7 +335,7 @@ const CourseDetail = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/home/peter/tempo-api/projects/cb1827ef-b44b-4a33-998b-b63e0dcedca0/otziv roza  (7).jpg"
+                src="/courses/roses/otziv roza  (7).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />

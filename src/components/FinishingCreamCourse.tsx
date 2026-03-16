@@ -242,7 +242,7 @@ const FinishingCreamCourse = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/home/peter/tempo-api/projects/cb1827ef-b44b-4a33-998b-b63e0dcedca0/otziv crem (2).jpg"
+                src="/otziv crem (2).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
@@ -278,7 +278,7 @@ const FinishingCreamCourse = ({
           <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
             <div className="relative w-full pb-[100%] overflow-hidden">
               <img
-                src="/home/peter/tempo-api/projects/cb1827ef-b44b-4a33-998b-b63e0dcedca0/otziv crem (4).jpg"
+                src="/otziv crem (4).jpg"
                 alt="Отзыв ученика"
                 className="absolute inset-0 object-contain w-full h-full"
               />
