@@ -718,6 +718,8 @@ const Home = () => {
             <p className="mt-2">ИНН 253615143415</p>
             <p className="mt-2">
               <a href="/offer" className="text-gray-400 hover:text-white transition-colors underline">Публичная оферта</a>
+              {" | "}
+              <a href="/privacy" className="text-gray-400 hover:text-white transition-colors underline">Политика конфиденциальности</a>
             </p>
           </div>
         </div>

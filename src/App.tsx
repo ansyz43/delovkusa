@@ -23,6 +23,7 @@ const VaseCourseLesson = lazy(() => import("./components/VaseCourseLesson"));
 const PlasticChocolateCourseLesson = lazy(() => import("./components/PlasticChocolateCourseLesson"));
 const PaymentReturn = lazy(() => import("./components/PaymentReturn"));
 const PublicOffer = lazy(() => import("./components/PublicOffer"));
+const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/payment/return" element={<PaymentReturn />} />
         <Route path="/offer" element={<PublicOffer />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route
           path="/dashboard"
           element={

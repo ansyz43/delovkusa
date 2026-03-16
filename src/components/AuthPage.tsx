@@ -119,18 +119,23 @@ const AuthPage = () => {
 
     const onMessage = async (e: MessageEvent) => {
       if (e.origin !== "https://oauth.telegram.org") return;
-      const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-      if (data && (data.id || data.auth_date)) {
+      try {
+        const raw = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        // Telegram sends {event: "auth_result", result: {id, first_name, ...}}
+        const userData = raw?.event === "auth_result" ? raw.result : raw;
+        if (!userData || (!userData.id && !userData.auth_date)) return;
         window.removeEventListener("message", onMessage);
         setLoading(true);
         try {
-          await loginWithTelegram(data);
+          await loginWithTelegram(userData);
           navigate("/dashboard");
         } catch (err: any) {
           setError(err.message || "Ошибка входа через Telegram");
         } finally {
           setLoading(false);
         }
+      } catch {
+        // ignore non-JSON messages
       }
     };
     window.addEventListener("message", onMessage);
