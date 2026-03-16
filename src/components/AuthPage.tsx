@@ -29,6 +29,7 @@ declare global {
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
 const TELEGRAM_BOT_NAME = import.meta.env.VITE_TELEGRAM_BOT_NAME as string | undefined;
+const TELEGRAM_BOT_ID = import.meta.env.VITE_TELEGRAM_BOT_ID as string | undefined;
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -107,7 +108,7 @@ const AuthPage = () => {
     const top = Math.round(screen.height / 2 - height / 2);
     const origin = window.location.origin;
     const popup = window.open(
-      `https://oauth.telegram.org/auth?bot_id=${TELEGRAM_BOT_NAME}&origin=${encodeURIComponent(origin)}&request_access=write`,
+      `https://oauth.telegram.org/auth?bot_id=${TELEGRAM_BOT_ID}&origin=${encodeURIComponent(origin)}&request_access=write`,
       "telegram_auth",
       `width=${width},height=${height},left=${left},top=${top}`,
     );
