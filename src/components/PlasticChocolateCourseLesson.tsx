@@ -59,12 +59,21 @@ const YandexVideoPlayer: React.FC<{ url: string; title: string }> = ({ url, titl
     };
   }, []);
 
+  const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+
   const handlePlay = useCallback(async () => {
     setStarted(true);
-    setLoading(true);
     setError(null);
     setReady(false);
     setFallback(false);
+
+    if (isMobile) {
+      setLoading(false);
+      setFallback(true);
+      return;
+    }
+
+    setLoading(true);
     try {
       const apiUrl = `https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=${encodeURIComponent(url)}`;
       const resp = await fetch(apiUrl);
@@ -113,7 +122,7 @@ const YandexVideoPlayer: React.FC<{ url: string; title: string }> = ({ url, titl
       setError(e.message || "Ошибка загрузки видео");
       setLoading(false);
     }
-  }, [url]);
+  }, [url, isMobile]);
 
   return (
     <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden">
