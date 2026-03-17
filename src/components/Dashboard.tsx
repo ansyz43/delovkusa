@@ -11,10 +11,11 @@ import {
   LogOut,
   Calendar,
   Award,
+  Shield,
 } from "lucide-react";
 
 const Dashboard = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -108,6 +109,27 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Link>
+
+            {/* Админ-панель (только для админов) */}
+            {isAdmin && (
+              <Link to="/admin" className="group">
+                <Card className="h-full border-0 shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border-l-4 border-l-red-400">
+                  <CardHeader className="pb-3">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-red-200 transition-colors">
+                      <Shield className="w-6 h-6 text-red-600" />
+                    </div>
+                    <CardTitle className="text-lg text-gray-800">
+                      Админ-панель
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-500 text-sm">
+                      Статистика, управление пользователями и заказами
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            )}
           </div>
 
           {/* Быстрая статистика */}

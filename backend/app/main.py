@@ -10,7 +10,7 @@ from slowapi.errors import RateLimitExceeded
 
 from app.config import settings
 from app.database import engine, Base
-from app.routers import auth, payments, courses
+from app.routers import auth, payments, courses, admin
 from app.logging_config import setup_logging
 
 setup_logging()
@@ -107,6 +107,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(payments.router)
 app.include_router(courses.router)
+app.include_router(admin.router)
 
 
 @app.on_event("startup")

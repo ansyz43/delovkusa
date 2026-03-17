@@ -22,6 +22,7 @@ const OstrovCourseLesson = lazy(() => import("./components/OstrovCourseLesson"))
 const VaseCourseLesson = lazy(() => import("./components/VaseCourseLesson"));
 const PlasticChocolateCourseLesson = lazy(() => import("./components/PlasticChocolateCourseLesson"));
 const PaymentReturn = lazy(() => import("./components/PaymentReturn"));
+const AdminPanel = lazy(() => import("./components/AdminPanel"));
 const PublicOffer = lazy(() => import("./components/PublicOffer"));
 const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
 
@@ -52,6 +53,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminPanel />
             </ProtectedRoute>
           }
         />

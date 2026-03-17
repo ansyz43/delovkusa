@@ -22,6 +22,7 @@ from app.auth import (
     create_access_token, create_refresh_token, decode_token,
     get_current_user,
 )
+from app.email_utils import send_welcome_email
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -76,6 +77,12 @@ async def register(
     db.add(user)
     await db.commit()
     await db.refresh(user)
+
+    # Send welcome email (fire-and-forget, don't block registration)
+    try:
+        send_welcome_email(data.email, data.name)
+    except Exception:
+        logger.exception("Failed to send welcome email to %s", data.email)
 
     access_token = create_access_token(user.id)
     refresh_token = create_refresh_token(user.id)

@@ -22,6 +22,13 @@ class Settings(BaseSettings):
 
     ENV: str = "development"  # "development" | "production"
 
+    # Email (optional — if empty, emails won't be sent)
+    SMTP_HOST: str = ""
+    SMTP_PORT: int = 465
+    SMTP_USER: str = ""
+    SMTP_PASS: str = ""
+    SMTP_FROM: str = ""
+
     @field_validator("COOKIE_SECURE", mode="before")
     @classmethod
     def auto_cookie_secure(cls, v, info):
