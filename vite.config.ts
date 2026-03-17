@@ -25,7 +25,7 @@ export default defineConfig({
     },
   },
   build: {
-    // Оптимизация сборки
+    sourcemap: false,
     minify: "terser",
     terserOptions: {
       compress: {
