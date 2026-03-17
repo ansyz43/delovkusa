@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import { Button } from "./ui/button";
@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Play,
 } from "lucide-react";
+import { useVideoUrls, injectVideoUrls } from "../lib/useVideoUrls";
 
 // ==========================================
 // Яндекс.Диск — встроенный видеоплеер через iframe
@@ -260,7 +261,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Вводный урок", url: "https://disk.yandex.ru/i/ScXLIiCgZbteUw" },
+          { title: "Вводный урок", url: "__VIDEO_0__" },
         ],
         description: "Вводный видео-урок курса по розам из пластичного шоколада. Обзор программы, материалов и техник.",
       },
@@ -277,7 +278,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Рецепт пластичного шоколада — видео", url: "https://disk.yandex.ru/i/XFKCxrpNLGuZuw" },
+          { title: "Рецепт пластичного шоколада — видео", url: "__VIDEO_1__" },
         ],
         description: "Видео-рецепт приготовления белого пластичного шоколада. Обязательно смотрим перед приготовлением!",
       },
@@ -301,7 +302,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Рецепт тёмного пластичного шоколада — видео", url: "https://disk.yandex.ru/i/fRvGbdGxq9CDQg" },
+          { title: "Рецепт тёмного пластичного шоколада — видео", url: "__VIDEO_2__" },
         ],
         description: "Видео-рецепт приготовления тёмного пластичного шоколада.",
       },
@@ -349,10 +350,10 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/DXy3VbwtRSGtqA" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/FCMtVB-r3zNbfg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/Tizx87iqNQTsMw" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/zaM-Qp1wlM_IOw" },
+          { title: "Часть 1", url: "__VIDEO_3__" },
+          { title: "Часть 2", url: "__VIDEO_4__" },
+          { title: "Часть 3", url: "__VIDEO_5__" },
+          { title: "Часть 4", url: "__VIDEO_6__" },
         ],
         description: "Полный видео-урок по созданию классической розы из пластичного шоколада. 4 части.",
         images: ["/courses/roses/classic-rose.jpg"],
@@ -377,8 +378,8 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/PvCTVFAyB26Avg" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/ozA_2gSLlnAB-w" },
+          { title: "Часть 1", url: "__VIDEO_7__" },
+          { title: "Часть 2", url: "__VIDEO_8__" },
         ],
         description: "Классическая роза с двойной окраской лепестка — красивый эффект градиента цвета.",
         images: ["/courses/roses/classic-double-color.jpg"],
@@ -396,10 +397,10 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/UPNJC52phxTh3A" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/W9ZBf-n49SQJMw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/q_2Fd7MvbsQDNw" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/4lW7T0cwwbwDEw" },
+          { title: "Часть 1", url: "__VIDEO_9__" },
+          { title: "Часть 2", url: "__VIDEO_10__" },
+          { title: "Часть 3", url: "__VIDEO_11__" },
+          { title: "Часть 4", url: "__VIDEO_12__" },
         ],
         description: "Видео-урок по созданию японской розы с пятью серединками. 4 части.",
         images: ["/courses/roses/japanese-5centers.jpg"],
@@ -424,11 +425,11 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/VBeNBxVHLIbn9g" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/uzXbl6EKu7-YrA" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/QTRw62qJVy9PGg" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/ef11F8AfiEmOWA" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/wmLGvRmKB6YW4A" },
+          { title: "Часть 1", url: "__VIDEO_13__" },
+          { title: "Часть 2", url: "__VIDEO_14__" },
+          { title: "Часть 3", url: "__VIDEO_15__" },
+          { title: "Часть 4", url: "__VIDEO_16__" },
+          { title: "Часть 5", url: "__VIDEO_17__" },
         ],
         description: "Видео-урок: японская роза с двойной окраской лепестка. 5 частей.",
         images: ["/courses/roses/japanese-double-color.jpg"],
@@ -453,11 +454,11 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/XZjbMNVPsda54w" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/w1x3o-Rpu_xXiw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/Pd9Z5OApV1pvDQ" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/jZZDk5u5RMvzPQ" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/aNEViM_h-G_seg" },
+          { title: "Часть 1", url: "__VIDEO_18__" },
+          { title: "Часть 2", url: "__VIDEO_19__" },
+          { title: "Часть 3", url: "__VIDEO_20__" },
+          { title: "Часть 4", url: "__VIDEO_21__" },
+          { title: "Часть 5", url: "__VIDEO_22__" },
         ],
         description: "Видео-урок по созданию раскрытой махровой розы в японском стиле. 5 частей.",
         images: ["/courses/roses/japanese-open.jpg"],
@@ -482,9 +483,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/eiZ-34PjjSIg5w" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/FNubDxZ7w4idRA" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/TQIbnETn-MxxUg" },
+          { title: "Часть 1", url: "__VIDEO_23__" },
+          { title: "Часть 2", url: "__VIDEO_24__" },
+          { title: "Часть 3", url: "__VIDEO_25__" },
         ],
         description: "Видео-урок: роза в японском стиле с начинкой внутри. 3 части.",
         images: ["/courses/roses/japanese-filled.jpg"],
@@ -509,9 +510,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/kbuCEHDn8b6lAQ" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/9dMjPbw9U5TzZw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/W2JTiQri69BXUQ" },
+          { title: "Часть 1", url: "__VIDEO_26__" },
+          { title: "Часть 2", url: "__VIDEO_27__" },
+          { title: "Часть 3", url: "__VIDEO_28__" },
         ],
         description: "Быстрая роза — первый вариант. 3 части.",
       },
@@ -521,9 +522,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/FJLH8D6HKJbESw" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/H52ACKoW2mNPNg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/rHQmkP33LxNrcQ" },
+          { title: "Часть 1", url: "__VIDEO_29__" },
+          { title: "Часть 2", url: "__VIDEO_30__" },
+          { title: "Часть 3", url: "__VIDEO_31__" },
         ],
         description: "Быстрая роза — второй вариант. 3 части.",
         images: ["/courses/roses/fast-rose-v2.jpg", "/courses/roses/fast-rose-v2-parts.jpg"],
@@ -534,9 +535,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/uYr8OTPFggInAw" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/qJ93gLO1Bvo90g" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/Wjq1y3-5btG9ww" },
+          { title: "Часть 1", url: "__VIDEO_32__" },
+          { title: "Часть 2", url: "__VIDEO_33__" },
+          { title: "Часть 3", url: "__VIDEO_34__" },
         ],
         description: "Быстрая роза со спиральной серединкой. 3 части.",
       },
@@ -553,11 +554,11 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/LToevFMTp1aLKg" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/-Byj5aM_TShElw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/E8dWM-aT03K1Zg" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/MBHvUSjx1FUBeA" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/l2u9m0UQgHozxQ" },
+          { title: "Часть 1", url: "__VIDEO_35__" },
+          { title: "Часть 2", url: "__VIDEO_36__" },
+          { title: "Часть 3", url: "__VIDEO_37__" },
+          { title: "Часть 4", url: "__VIDEO_38__" },
+          { title: "Часть 5", url: "__VIDEO_39__" },
         ],
         description: "Полный видео-урок по созданию элегантной розы Мондиаль. 5 частей.",
         images: ["/courses/roses/mondial.jpg"],
@@ -582,12 +583,12 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/LE8QTIP1XeC1WA" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/0ihaoC_9iXYlNQ" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/k8Ptk4KgIJhJRA" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/a12mTPwUtdt2HQ" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/OJ1vZX_RUHKXOg" },
-          { title: "Часть 6", url: "https://disk.yandex.ru/i/EdIN24xGEAQ08Q" },
+          { title: "Часть 1", url: "__VIDEO_40__" },
+          { title: "Часть 2", url: "__VIDEO_41__" },
+          { title: "Часть 3", url: "__VIDEO_42__" },
+          { title: "Часть 4", url: "__VIDEO_43__" },
+          { title: "Часть 5", url: "__VIDEO_44__" },
+          { title: "Часть 6", url: "__VIDEO_45__" },
         ],
         description: "Полный видео-урок по созданию раскрытой розы Остина. 6 частей.",
         images: ["/courses/roses/austin-open.jpg"],
@@ -612,13 +613,13 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/pEcXX09yNEzujw" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/pPi5Hmk3R8ILAg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/vpAGgYkFfwkojg" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/Fly9x8ehopt-sw" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/30xnoraqZV1fnA" },
-          { title: "Часть 6", url: "https://disk.yandex.ru/i/AwEPepCHvAKUJQ" },
-          { title: "Часть 7", url: "https://disk.yandex.ru/i/DQog_gyRxCsl-g" },
+          { title: "Часть 1", url: "__VIDEO_46__" },
+          { title: "Часть 2", url: "__VIDEO_47__" },
+          { title: "Часть 3", url: "__VIDEO_48__" },
+          { title: "Часть 4", url: "__VIDEO_49__" },
+          { title: "Часть 5", url: "__VIDEO_50__" },
+          { title: "Часть 6", url: "__VIDEO_51__" },
+          { title: "Часть 7", url: "__VIDEO_52__" },
         ],
         description: "Полный видео-урок по созданию полузакрытой розы Остина. 7 частей.",
         images: ["/courses/roses/austin-half.jpg"],
@@ -643,10 +644,10 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/bQCoD4Cdr_6XTg" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/Hv-3lluNHdOtzg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/PZFsqDJUFb_exg" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/CwT_JDB713nRBQ" },
+          { title: "Часть 1", url: "__VIDEO_53__" },
+          { title: "Часть 2", url: "__VIDEO_54__" },
+          { title: "Часть 3", url: "__VIDEO_55__" },
+          { title: "Часть 4", url: "__VIDEO_56__" },
         ],
         description: "Видео-урок: роза с острыми лепестками и окрашенными кончиками. 4 части.",
         images: ["/courses/roses/sharp-petals.jpg"],
@@ -671,11 +672,11 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/v9CZyN-2P33zPA" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/lSapg9mMLOBv5Q" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/WXlyZElfQysMnQ" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/62qKa2kOpaLthA" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/rFHWJf19d90odQ" },
+          { title: "Часть 1", url: "__VIDEO_57__" },
+          { title: "Часть 2", url: "__VIDEO_58__" },
+          { title: "Часть 3", url: "__VIDEO_59__" },
+          { title: "Часть 4", url: "__VIDEO_60__" },
+          { title: "Часть 5", url: "__VIDEO_61__" },
         ],
         description: "Видео-урок по созданию тройной махровой розы. 5 частей.",
         images: ["/courses/roses/triple-terry.jpg"],
@@ -700,11 +701,11 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/B7Qdw9x4h5fNPA" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/jrjoO9ZNpK4U5g" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/eWOQ3o4vr3b3dg" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/RSMdjz77lWe9IQ" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/l6-EF2FJX_yPkA" },
+          { title: "Часть 1", url: "__VIDEO_62__" },
+          { title: "Часть 2", url: "__VIDEO_63__" },
+          { title: "Часть 3", url: "__VIDEO_64__" },
+          { title: "Часть 4", url: "__VIDEO_65__" },
+          { title: "Часть 5", url: "__VIDEO_66__" },
         ],
         description: "Видео-урок: роза Катана с тремя видами сборки. 5 частей.",
         images: ["/courses/roses/katana-1.jpg", "/courses/roses/katana-2.jpg"],
@@ -729,11 +730,11 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/zcwXiY8hU-VCxQ" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/LFe9At92QOgqUw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/YVERArObNfB4cA" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/jQcA2vRMkXSkoQ" },
-          { title: "Часть 5", url: "https://disk.yandex.ru/i/GX-gi93U6mq3iQ" },
+          { title: "Часть 1", url: "__VIDEO_67__" },
+          { title: "Часть 2", url: "__VIDEO_68__" },
+          { title: "Часть 3", url: "__VIDEO_69__" },
+          { title: "Часть 4", url: "__VIDEO_70__" },
+          { title: "Часть 5", url: "__VIDEO_71__" },
         ],
         description: "Бонусный урок по созданию фиалок из пластичного шоколада. 5 частей.",
         images: ["/courses/roses/violets.jpg"],
@@ -839,6 +840,9 @@ const courseModules: LessonModule[] = [
 // ==========================================
 
 const RoseCourseLesson: React.FC = () => {
+  const { urls: videoUrls } = useVideoUrls("roses");
+  const modules = useMemo(() => injectVideoUrls(courseModules, videoUrls), [videoUrls]);
+
   const [openModuleId, setOpenModuleId] = useState<number>(1);
   const [activeItem, setActiveItem] = useState<LessonItem>(courseModules[0].items[0]);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
@@ -846,7 +850,7 @@ const RoseCourseLesson: React.FC = () => {
   const [contentKey, setContentKey] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = courseModules.reduce((sum, m) => sum + m.items.length, 0);
+  const totalItems = modules.reduce((sum, m) => sum + m.items.length, 0);
   const completedCount = completedItems.size;
   const progress = Math.round((completedCount / totalItems) * 100);
 
@@ -865,7 +869,7 @@ const RoseCourseLesson: React.FC = () => {
     }
     setActiveItem(item);
     setContentKey((k) => k + 1);
-    const mod = courseModules.find((m) => m.items.some((i) => i.id === item.id));
+    const mod = modules.find((m) => m.items.some((i) => i.id === item.id));
     if (mod) setOpenModuleId(mod.id);
     setTimeout(() => {
       contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -881,7 +885,7 @@ const RoseCourseLesson: React.FC = () => {
     });
   };
 
-  const allItems = courseModules.flatMap((m) => m.items);
+  const allItems = modules.flatMap((m) => m.items);
   const currentIdx = allItems.findIndex((i) => i.id === activeItem.id);
   const prevItem = currentIdx > 0 ? allItems[currentIdx - 1] : null;
   const nextItem = currentIdx < allItems.length - 1 ? allItems[currentIdx + 1] : null;
@@ -996,7 +1000,7 @@ const RoseCourseLesson: React.FC = () => {
                 </h3>
 
                 <div className="space-y-1">
-                  {courseModules.map((mod) => {
+                  {modules.map((mod) => {
                     const isOpen = openModuleId === mod.id;
                     const modCompleted = mod.items.every((i) =>
                       completedItems.has(i.id),

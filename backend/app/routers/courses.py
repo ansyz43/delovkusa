@@ -11,6 +11,7 @@ from app.database import get_db
 from app.models import Course, UserCourseAccess, User
 from app.auth import get_current_user
 from app.schemas import CourseAccessResponse, UserCoursesResponse
+from app.course_videos import COURSE_VIDEO_URLS
 
 router = APIRouter(prefix="/api/courses", tags=["courses"])
 
@@ -61,6 +62,30 @@ async def check_course_access(
         )
     )
     return CourseAccessResponse(has_access=result.scalar_one_or_none() is not None)
+
+
+@router.get("/{course_id}/videos")
+async def get_course_videos(
+    course_id: str,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Return video URLs for a course — only if user has access."""
+    if not user.is_admin:
+        result = await db.execute(
+            select(UserCourseAccess).where(
+                UserCourseAccess.user_id == user.id,
+                UserCourseAccess.course_id == course_id,
+            )
+        )
+        if not result.scalar_one_or_none():
+            raise HTTPException(status_code=403, detail="Нет доступа к этому курсу")
+
+    urls = COURSE_VIDEO_URLS.get(course_id)
+    if urls is None:
+        raise HTTPException(status_code=404, detail="Курс не найден")
+
+    return {"urls": urls}
 
 
 @router.get("/{course_id}/download")

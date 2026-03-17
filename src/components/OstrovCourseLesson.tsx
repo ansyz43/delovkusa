@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import { Button } from "./ui/button";
@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Play,
 } from "lucide-react";
+import { useVideoUrls, injectVideoUrls } from "../lib/useVideoUrls";
 
 // ==========================================
 // Яндекс.Диск — встроенный видеоплеер
@@ -255,7 +256,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Приготовление бисквита", url: "https://disk.yandex.ru/i/c6o0O35SqsIpjw" },
+          { title: "Приготовление бисквита", url: "__VIDEO_0__" },
         ],
         description: "Подробное видео процесса приготовления бисквита — выпечка и проверка готовности.",
         duration: "~10 мин",
@@ -266,7 +267,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Шоколадный шифоновый бисквит", url: "https://disk.yandex.ru/i/ZB1qeWNDRUjPoQ" },
+          { title: "Шоколадный шифоновый бисквит", url: "__VIDEO_1__" },
         ],
         description: "Видео-урок по приготовлению шоколадного шифонового бисквита для торта «Остров».",
         duration: "~15 мин",
@@ -284,7 +285,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Шоколадное кремю", url: "https://disk.yandex.ru/i/iDG3sCgc22bboQ" },
+          { title: "Шоколадное кремю", url: "__VIDEO_2__" },
         ],
         description: "Видео-урок по приготовлению шоколадного кремю — нежной начинки для торта.",
         duration: "~10 мин",
@@ -295,7 +296,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Вишня фламбе", url: "https://disk.yandex.ru/i/6rIZI_-GQjo9zg" },
+          { title: "Вишня фламбе", url: "__VIDEO_3__" },
         ],
         description: "Видео-урок по приготовлению вишни фламбе — яркого вкусового акцента.",
         duration: "~10 мин",
@@ -306,7 +307,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Карамелизированный грецкий орех", url: "https://disk.yandex.ru/i/RUF0G21M9uNzQw" },
+          { title: "Карамелизированный грецкий орех", url: "__VIDEO_4__" },
         ],
         description: "Видео-урок по приготовлению карамелизированного грецкого ореха.",
         duration: "~10 мин",
@@ -324,7 +325,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Подложка 30 на 30", url: "https://disk.yandex.ru/i/uGTwom6LFJx7Ag" },
+          { title: "Подложка 30 на 30", url: "__VIDEO_5__" },
         ],
         description: "Видео-урок по подготовке подложки размером 30x30 (35x35) см для торта «Остров».",
         duration: "~10 мин",
@@ -342,7 +343,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Белый пластичный шоколад", url: "https://disk.yandex.ru/i/2O7D3g3gVY4bEg" },
+          { title: "Белый пластичный шоколад", url: "__VIDEO_6__" },
         ],
         description: "Видео-урок по приготовлению белого пластичного шоколада.",
         duration: "~10 мин",
@@ -360,7 +361,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Тёмный пластичный шоколад", url: "https://disk.yandex.ru/i/EQmZXTzdOkp-nw" },
+          { title: "Тёмный пластичный шоколад", url: "__VIDEO_7__" },
         ],
         description: "Видео-урок по приготовлению тёмного пластичного шоколада.",
         duration: "~10 мин",
@@ -378,7 +379,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Заливка основы кокоса", url: "https://disk.yandex.ru/i/XXXqcpdIIdQNMQ" },
+          { title: "Заливка основы кокоса", url: "__VIDEO_8__" },
         ],
         description: "Видео-урок по заливке и формированию кокосовой основы острова.",
         duration: "~10 мин",
@@ -396,7 +397,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Пальмы — инструменты", url: "https://disk.yandex.ru/i/sAjGvoOiFtSQxw" },
+          { title: "Пальмы — инструменты", url: "__VIDEO_9__" },
         ],
         description: "Видео-урок по инструментам и технике создания пальм.",
         duration: "~10 мин",
@@ -407,7 +408,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Мякоть кокоса", url: "https://disk.yandex.ru/i/lWCRFg8B7KMKoQ" },
+          { title: "Мякоть кокоса", url: "__VIDEO_10__" },
         ],
         description: "Видео-урок по работе с кокосовой мякотью для украшения острова.",
         duration: "~10 мин",
@@ -425,7 +426,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Черепаха из изомальта", url: "https://disk.yandex.ru/i/JZvAQrCq52LIsA" },
+          { title: "Черепаха из изомальта", url: "__VIDEO_11__" },
         ],
         description: "Видео-урок по созданию черепахи из изомальта — способ 1.",
         duration: "~10 мин",
@@ -436,7 +437,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Мелкий декор", url: "https://disk.yandex.ru/i/4DLLogKevk1pBw" },
+          { title: "Мелкий декор", url: "__VIDEO_12__" },
         ],
         description: "Видео-урок по созданию мелких декоративных элементов.",
         duration: "~10 мин",
@@ -447,7 +448,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Мелкий декор — часть 2", url: "https://disk.yandex.ru/i/lHH6PKNPttCKTA" },
+          { title: "Мелкий декор — часть 2", url: "__VIDEO_13__" },
         ],
         description: "Зонтик, шезлонг, цветы и другие мелкие декоративные элементы.",
         duration: "~10 мин",
@@ -458,7 +459,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Черепаха — способ 2", url: "https://disk.yandex.ru/i/c6YpVqbGrDyMdQ" },
+          { title: "Черепаха — способ 2", url: "__VIDEO_14__" },
         ],
         description: "Альтернативный способ создания черепахи для декора.",
         duration: "~10 мин",
@@ -483,7 +484,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Сборка торта", url: "https://disk.yandex.ru/i/CvQjo4nKWSel5Q" },
+          { title: "Сборка торта", url: "__VIDEO_15__" },
         ],
         description: "Подробное видео по сборке торта «Остров» — все этапы от основания до завершения.",
         duration: "~15 мин",
@@ -501,7 +502,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Море", url: "https://disk.yandex.ru/i/woyYGheC3jKzkA" },
+          { title: "Море", url: "__VIDEO_16__" },
         ],
         description: "Видео-урок по созданию реалистичного моря для торта «Остров».",
         duration: "~15 мин",
@@ -526,7 +527,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Декор", url: "https://disk.yandex.ru/i/8Ij76pga_iWHDA" },
+          { title: "Декор", url: "__VIDEO_17__" },
         ],
         description: "Финальный видео-урок по декорированию торта «Остров».",
         duration: "~15 мин",
@@ -582,6 +583,9 @@ const courseModules: LessonModule[] = [
 // ==========================================
 
 const OstrovCourseLesson: React.FC = () => {
+  const { urls: videoUrls } = useVideoUrls("ostrov");
+  const modules = useMemo(() => injectVideoUrls(courseModules, videoUrls), [videoUrls]);
+
   const [openModuleId, setOpenModuleId] = useState<number>(1);
   const [activeItem, setActiveItem] = useState<LessonItem>(courseModules[0].items[0]);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
@@ -589,7 +593,7 @@ const OstrovCourseLesson: React.FC = () => {
   const [contentKey, setContentKey] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = courseModules.reduce((sum, m) => sum + m.items.length, 0);
+  const totalItems = modules.reduce((sum, m) => sum + m.items.length, 0);
   const completedCount = completedItems.size;
   const progress = Math.round((completedCount / totalItems) * 100);
 
@@ -608,7 +612,7 @@ const OstrovCourseLesson: React.FC = () => {
     }
     setActiveItem(item);
     setContentKey((k) => k + 1);
-    const mod = courseModules.find((m) => m.items.some((i) => i.id === item.id));
+    const mod = modules.find((m) => m.items.some((i) => i.id === item.id));
     if (mod) setOpenModuleId(mod.id);
     setTimeout(() => {
       contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -624,7 +628,7 @@ const OstrovCourseLesson: React.FC = () => {
     });
   };
 
-  const allItems = courseModules.flatMap((m) => m.items);
+  const allItems = modules.flatMap((m) => m.items);
   const currentIdx = allItems.findIndex((i) => i.id === activeItem.id);
   const prevItem = currentIdx > 0 ? allItems[currentIdx - 1] : null;
   const nextItem = currentIdx < allItems.length - 1 ? allItems[currentIdx + 1] : null;
@@ -736,7 +740,7 @@ const OstrovCourseLesson: React.FC = () => {
                 </h3>
 
                 <div className="space-y-1">
-                  {courseModules.map((mod) => {
+                  {modules.map((mod) => {
                     const isOpen = openModuleId === mod.id;
                     const modCompleted = mod.items.every((i) =>
                       completedItems.has(i.id),

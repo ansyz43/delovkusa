@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import logging
+import re
 import time
 
 import httpx
@@ -8,7 +9,6 @@ from fastapi import APIRouter, Depends, HTTPException, Response, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from slowapi import Limiter
-from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models import User
@@ -24,8 +24,24 @@ from app.auth import (
 )
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
-limiter = Limiter(key_func=get_remote_address)
+
+
+def _get_real_ip(request: Request) -> str:
+    """Get client IP behind Nginx proxy."""
+    return (
+        request.headers.get("x-real-ip")
+        or request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+        or (request.client.host if request.client else "127.0.0.1")
+    )
+
+
+limiter = Limiter(key_func=_get_real_ip)
 logger = logging.getLogger(__name__)
+
+# In-memory login attempt tracker
+_login_attempts: dict[str, list[float]] = {}
+_LOCKOUT_ATTEMPTS = 5
+_LOCKOUT_WINDOW = 900  # 15 minutes
 
 
 # ==========================================
@@ -40,6 +56,12 @@ async def register(
     response: Response,
     db: AsyncSession = Depends(get_db),
 ):
+    # Password policy: min 8 chars, at least 1 letter and 1 digit
+    if len(data.password) < 8:
+        raise HTTPException(status_code=400, detail="Пароль должен содержать минимум 8 символов")
+    if not re.search(r'[A-Za-zА-я]', data.password) or not re.search(r'\d', data.password):
+        raise HTTPException(status_code=400, detail="Пароль должен содержать буквы и цифры")
+
     # Check if email already exists
     result = await db.execute(select(User).where(User.email == data.email))
     if result.scalar_one_or_none():
@@ -86,9 +108,26 @@ async def login(
     result = await db.execute(select(User).where(User.email == data.email))
     user = result.scalar_one_or_none()
 
+    # Account lockout check
+    client_ip = _get_real_ip(request)
+    lockout_key = f"{data.email}:{client_ip}"
+    now = time.time()
+    attempts = _login_attempts.get(lockout_key, [])
+    # Clean old attempts
+    attempts = [t for t in attempts if now - t < _LOCKOUT_WINDOW]
+    if len(attempts) >= _LOCKOUT_ATTEMPTS:
+        logger.warning("Account locked out: email=%s ip=%s", data.email, client_ip)
+        raise HTTPException(status_code=429, detail="Слишком много попыток. Подождите 15 минут")
+
     if not user or not user.password_hash or not verify_password(data.password, user.password_hash):
-        logger.warning("Failed login attempt for email=%s ip=%s", data.email, request.client.host if request.client else "unknown")
+        # Record failed attempt
+        attempts.append(now)
+        _login_attempts[lockout_key] = attempts
+        logger.warning("Failed login attempt for email=%s ip=%s (attempt %d)", data.email, client_ip, len(attempts))
         raise HTTPException(status_code=401, detail="Неверный email или пароль")
+
+    # Clear attempts on success
+    _login_attempts.pop(lockout_key, None)
 
     if not user.is_active:
         logger.warning("Deactivated account login attempt: user_id=%s", user.id)
@@ -176,18 +215,20 @@ async def logout(response: Response):
 # ==========================================
 
 async def _verify_google_token(credential: str) -> dict | None:
-    async with httpx.AsyncClient(timeout=10) as client:
-        resp = await client.get(
-            f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}"
+    from google.oauth2 import id_token as google_id_token
+    from google.auth.transport import requests as google_requests
+
+    try:
+        payload = google_id_token.verify_oauth2_token(
+            credential,
+            google_requests.Request(),
+            settings.GOOGLE_CLIENT_ID,
         )
-        if resp.status_code != 200:
-            return None
-        payload = resp.json()
-        if payload.get("aud") != settings.GOOGLE_CLIENT_ID:
-            return None
-        if payload.get("email_verified") != "true":
+        if payload.get("email_verified") is not True:
             return None
         return payload
+    except Exception:
+        return None
 
 
 @router.post("/google", response_model=TokenResponse)

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import { Button } from "./ui/button";
@@ -21,6 +21,7 @@ import {
   AlertCircle,
   Play,
 } from "lucide-react";
+import { useVideoUrls, injectVideoUrls } from "../lib/useVideoUrls";
 
 // ==========================================
 // Яндекс.Диск — встроенный видеоплеер через iframe
@@ -256,7 +257,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Финишный крем на белом шоколаде", url: "https://disk.yandex.ru/i/uEmRxd6sxQUEqw" },
+          { title: "Финишный крем на белом шоколаде", url: "__VIDEO_0__" },
         ],
         description:
           "Видео-рецепт приготовления финишного крема на белом шоколаде.",
@@ -275,7 +276,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Финишный крем на тёмном шоколаде", url: "https://disk.yandex.ru/i/xMHFiFJGVmA1yw" },
+          { title: "Финишный крем на тёмном шоколаде", url: "__VIDEO_1__" },
         ],
         description:
           "Видео-рецепт финишного крема на тёмном шоколаде.",
@@ -365,7 +366,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Работа ручным миксером", url: "https://disk.yandex.ru/i/_h0ycCKTrnuXsw" },
+          { title: "Работа ручным миксером", url: "__VIDEO_2__" },
         ],
         description:
           "Подробный видео-урок по технике работы ручным миксером при приготовлении финишного крема. Правильная скорость, движения и время взбивания.",
@@ -384,7 +385,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Равняем квадрат", url: "https://disk.yandex.ru/i/3uTKIBaLw-S7JQ" },
+          { title: "Равняем квадрат", url: "__VIDEO_3__" },
         ],
         description:
           "Видео-урок по выравниванию торта в форме высокого параллелепипеда/квадрата финишным кремом. Техника достижения идеально ровных граней и углов.",
@@ -403,7 +404,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Сборка двухъярусного торта — Часть 1", url: "https://disk.yandex.ru/i/wx1D3lQ88e-bSw" },
+          { title: "Сборка двухъярусного торта — Часть 1", url: "__VIDEO_4__" },
         ],
         description:
           "Первая часть бонусного урока по сборке двухъярусного торта.",
@@ -415,7 +416,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Сборка двухъярусного торта — Часть 2", url: "https://disk.yandex.ru/i/KTIU6EQQxiu58w" },
+          { title: "Сборка двухъярусного торта — Часть 2", url: "__VIDEO_5__" },
         ],
         description:
           "Вторая часть бонусного урока — финальная сборка ярусного торта.",
@@ -441,7 +442,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Лайфхак по остаткам крема", url: "https://disk.yandex.ru/i/cWcw0cnWzGvVMw" },
+          { title: "Лайфхак по остаткам крема", url: "__VIDEO_6__" },
         ],
         description:
           "Полезный лайфхак — как использовать остатки финишного крема.",
@@ -491,6 +492,9 @@ const courseModules: LessonModule[] = [
 // ==========================================
 
 const CourseLesson: React.FC = () => {
+  const { urls: videoUrls } = useVideoUrls("cream");
+  const modules = useMemo(() => injectVideoUrls(courseModules, videoUrls), [videoUrls]);
+
   const [openModuleId, setOpenModuleId] = useState<number>(1);
   const [activeItem, setActiveItem] = useState<LessonItem>(courseModules[0].items[0]);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
@@ -498,7 +502,7 @@ const CourseLesson: React.FC = () => {
   const [contentKey, setContentKey] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = courseModules.reduce((sum, m) => sum + m.items.length, 0);
+  const totalItems = modules.reduce((sum, m) => sum + m.items.length, 0);
   const completedCount = completedItems.size;
   const progress = Math.round((completedCount / totalItems) * 100);
 
@@ -517,7 +521,7 @@ const CourseLesson: React.FC = () => {
     }
     setActiveItem(item);
     setContentKey((k) => k + 1);
-    const mod = courseModules.find((m) => m.items.some((i) => i.id === item.id));
+    const mod = modules.find((m) => m.items.some((i) => i.id === item.id));
     if (mod) setOpenModuleId(mod.id);
     setTimeout(() => {
       contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -534,7 +538,7 @@ const CourseLesson: React.FC = () => {
   };
 
   // Navigate to next/prev item
-  const allItems = courseModules.flatMap((m) => m.items);
+  const allItems = modules.flatMap((m) => m.items);
   const currentIdx = allItems.findIndex((i) => i.id === activeItem.id);
   const prevItem = currentIdx > 0 ? allItems[currentIdx - 1] : null;
   const nextItem = currentIdx < allItems.length - 1 ? allItems[currentIdx + 1] : null;
@@ -671,7 +675,7 @@ const CourseLesson: React.FC = () => {
                 </h3>
 
                 <div className="space-y-1">
-                  {courseModules.map((mod) => {
+                  {modules.map((mod) => {
                     const isOpen = openModuleId === mod.id;
                     const modCompleted = mod.items.every((i) =>
                       completedItems.has(i.id),

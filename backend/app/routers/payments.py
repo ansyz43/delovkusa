@@ -1,4 +1,6 @@
+import ipaddress
 import logging
+import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import select
@@ -12,6 +14,14 @@ from app.schemas import CreatePaymentRequest, CreatePaymentResponse, OrderStatus
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
 logger = logging.getLogger(__name__)
+
+# YooKassa webhook source IP ranges
+_YOOKASSA_NETS = [
+    ipaddress.ip_network("185.71.76.0/27"),
+    ipaddress.ip_network("185.71.77.0/27"),
+    ipaddress.ip_network("77.75.153.0/25"),
+    ipaddress.ip_network("77.75.154.128/25"),
+]
 
 
 @router.post("/create", response_model=CreatePaymentResponse)
@@ -64,7 +74,7 @@ async def create_payment(
         "capture": True,
         "description": f"Курс: {course.title}",
         "metadata": {"order_id": str(order.id), "user_id": str(user.id)},
-    })
+    }, idempotency_key=str(uuid.uuid4()))
 
     order.yookassa_payment_id = payment.id
     await db.commit()
@@ -81,6 +91,21 @@ async def create_payment(
 @router.post("/webhook")
 async def yookassa_webhook(request: Request, db: AsyncSession = Depends(get_db)):
     """YooKassa webhook — called when payment status changes."""
+    # Verify source IP is from YooKassa
+    client_ip_str = request.headers.get("x-real-ip") or (
+        request.client.host if request.client else None
+    )
+    if client_ip_str:
+        try:
+            client_ip = ipaddress.ip_address(client_ip_str)
+            if not any(client_ip in net for net in _YOOKASSA_NETS):
+                logger.warning("Webhook rejected: untrusted IP %s", client_ip_str)
+                raise HTTPException(status_code=403, detail="Forbidden")
+        except ValueError:
+            raise HTTPException(status_code=403, detail="Forbidden")
+    else:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
     body = await request.json()
     event_type = body.get("event")
     payment_data = body.get("object", {})

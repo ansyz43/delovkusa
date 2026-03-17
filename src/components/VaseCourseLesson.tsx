@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import { Button } from "./ui/button";
@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Play,
 } from "lucide-react";
+import { useVideoUrls, injectVideoUrls } from "../lib/useVideoUrls";
 
 // ==========================================
 // Яндекс.Диск — встроенный видеоплеер
@@ -270,7 +271,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Бисквит", url: "https://disk.yandex.ru/i/_hEBH_q5QRFx5Q" },
+          { title: "Бисквит", url: "__VIDEO_0__" },
         ],
         description: "Видео-урок по выпечке черничного бисквита для торта-вазы.",
       },
@@ -294,7 +295,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Конфи", url: "https://disk.yandex.ru/i/rOhMUwO6JSEqDw" },
+          { title: "Конфи", url: "__VIDEO_1__" },
         ],
         description: "Видео-урок по приготовлению ягодного конфи.",
       },
@@ -318,7 +319,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Дамба и кремчиз", url: "https://disk.yandex.ru/i/iHMtiqkFdjYpgw" },
+          { title: "Дамба и кремчиз", url: "__VIDEO_2__" },
         ],
         description: "Видео-урок по приготовлению кремчиза и формированию дамбы.",
       },
@@ -342,7 +343,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Хрустящий слой и пралине", url: "https://disk.yandex.ru/i/JhCDW5UvRqqBkA" },
+          { title: "Хрустящий слой и пралине", url: "__VIDEO_3__" },
         ],
         description: "Видео-урок по приготовлению хрустящего слоя и пралине.",
       },
@@ -366,7 +367,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Сборка торта", url: "https://disk.yandex.ru/i/a7PMf3WILNq14g" },
+          { title: "Сборка торта", url: "__VIDEO_4__" },
         ],
         description: "Видео-урок по сборке торта-вазы.",
       },
@@ -383,7 +384,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Финишный крем на тёмном шоколаде", url: "https://disk.yandex.ru/i/d4y-I_bJiWRexQ" },
+          { title: "Финишный крем на тёмном шоколаде", url: "__VIDEO_5__" },
         ],
         description: "Видео-урок по приготовлению финишного крема на тёмном шоколаде.",
       },
@@ -414,8 +415,8 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/eAkRw6DSpUnizg" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/xGKH9q9zzPCIPw" },
+          { title: "Часть 1", url: "__VIDEO_6__" },
+          { title: "Часть 2", url: "__VIDEO_7__" },
         ],
         description: "Видео-урок по формовке торта в виде вазы. 2 части.",
       },
@@ -432,7 +433,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Выравнивание торта", url: "https://disk.yandex.ru/i/VAz2S0UGPRfTTQ" },
+          { title: "Выравнивание торта", url: "__VIDEO_8__" },
         ],
         description: "Видео-урок по выравниванию поверхности торта-вазы.",
       },
@@ -449,7 +450,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Текстура и грани", url: "https://disk.yandex.ru/i/5n6kVALU1HSYSQ" },
+          { title: "Текстура и грани", url: "__VIDEO_9__" },
         ],
         description: "Видео-урок по созданию текстуры и граней на торте-вазе.",
       },
@@ -466,9 +467,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/d9iXBDacU9b-Iw" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/AfMsHnlSOEkUfg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/wG13i3rmQUi3CQ" },
+          { title: "Часть 1", url: "__VIDEO_10__" },
+          { title: "Часть 2", url: "__VIDEO_11__" },
+          { title: "Часть 3", url: "__VIDEO_12__" },
         ],
         description: "Видео-урок по окрашиванию торта-вазы. 3 части.",
       },
@@ -485,10 +486,10 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/DXy3VbwtRSGtqA" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/FCMtVB-r3zNbfg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/Tizx87iqNQTsMw" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/zaM-Qp1wlM_IOw" },
+          { title: "Часть 1", url: "__VIDEO_13__" },
+          { title: "Часть 2", url: "__VIDEO_14__" },
+          { title: "Часть 3", url: "__VIDEO_15__" },
+          { title: "Часть 4", url: "__VIDEO_16__" },
         ],
         description: "Видео-урок: классическая роза из пластичного шоколада со стеблем. 4 части.",
       },
@@ -505,8 +506,8 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/PvCTVFAyB26Avg" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/ozA_2gSLlnAB-w" },
+          { title: "Часть 1", url: "__VIDEO_17__" },
+          { title: "Часть 2", url: "__VIDEO_18__" },
         ],
         description: "Видео-урок: роза с двойным лепестком из пластичного шоколада. 2 части.",
       },
@@ -523,7 +524,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Рецепт пластичного шоколада", url: "https://disk.yandex.ru/i/XFKCxrpNLGuZuw" },
+          { title: "Рецепт пластичного шоколада", url: "__VIDEO_19__" },
         ],
         description: "Видео-рецепт приготовления пластичного шоколада.",
       },
@@ -547,10 +548,10 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/UPNJC52phxTh3A" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/W9ZBf-n49SQJMw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/q_2Fd7MvbsQDNw" },
-          { title: "Часть 4", url: "https://disk.yandex.ru/i/4lW7T0cwwbwDEw" },
+          { title: "Часть 1", url: "__VIDEO_20__" },
+          { title: "Часть 2", url: "__VIDEO_21__" },
+          { title: "Часть 3", url: "__VIDEO_22__" },
+          { title: "Часть 4", url: "__VIDEO_23__" },
         ],
         description: "Видео-урок: японская роза с пятью серединками. 4 части.",
       },
@@ -567,9 +568,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/at0iWA3y4kexmg" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/AsbEs9bfeqfcTg" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/rQ-xeL5cvQE-Pg" },
+          { title: "Часть 1", url: "__VIDEO_24__" },
+          { title: "Часть 2", url: "__VIDEO_25__" },
+          { title: "Часть 3", url: "__VIDEO_26__" },
         ],
         description: "Видео-урок: большой фантазийный цветок из пластичного шоколада. 3 части.",
       },
@@ -586,9 +587,9 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Часть 1", url: "https://disk.yandex.ru/i/kbuCEHDn8b6lAQ" },
-          { title: "Часть 2", url: "https://disk.yandex.ru/i/9dMjPbw9U5TzZw" },
-          { title: "Часть 3", url: "https://disk.yandex.ru/i/W2JTiQri69BXUQ" },
+          { title: "Часть 1", url: "__VIDEO_27__" },
+          { title: "Часть 2", url: "__VIDEO_28__" },
+          { title: "Часть 3", url: "__VIDEO_29__" },
         ],
         description: "Видео-урок: быстрая роза из пластичного шоколада. 3 части.",
       },
@@ -605,7 +606,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Крокус (бонус)", url: "https://disk.yandex.ru/i/GLId8gtwfF4Lww" },
+          { title: "Крокус (бонус)", url: "__VIDEO_30__" },
         ],
         description: "Бонусный видео-урок по лепке крокусов из пластичного шоколада.",
       },
@@ -695,6 +696,9 @@ const courseModules: LessonModule[] = [
 // ==========================================
 
 const VaseCourseLesson: React.FC = () => {
+  const { urls: videoUrls } = useVideoUrls("vase");
+  const modules = useMemo(() => injectVideoUrls(courseModules, videoUrls), [videoUrls]);
+
   const [activeItem, setActiveItem] = useState<LessonItem>(courseModules[0].items[0]);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
   const [openModuleId, setOpenModuleId] = useState<number>(courseModules[0].id);
@@ -702,7 +706,7 @@ const VaseCourseLesson: React.FC = () => {
   const [contentKey, setContentKey] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = courseModules.reduce((s, m) => s + m.items.length, 0);
+  const totalItems = modules.reduce((s, m) => s + m.items.length, 0);
   const completedCount = completedItems.size;
   const progress = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
 
@@ -720,7 +724,7 @@ const VaseCourseLesson: React.FC = () => {
     }
     setActiveItem(item);
     setContentKey((k) => k + 1);
-    const mod = courseModules.find((m) => m.items.some((i) => i.id === item.id));
+    const mod = modules.find((m) => m.items.some((i) => i.id === item.id));
     if (mod) setOpenModuleId(mod.id);
     setTimeout(() => {
       contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -736,7 +740,7 @@ const VaseCourseLesson: React.FC = () => {
     });
   };
 
-  const allItems = courseModules.flatMap((m) => m.items);
+  const allItems = modules.flatMap((m) => m.items);
   const currentIdx = allItems.findIndex((i) => i.id === activeItem.id);
   const prevItem = currentIdx > 0 ? allItems[currentIdx - 1] : null;
   const nextItem = currentIdx < allItems.length - 1 ? allItems[currentIdx + 1] : null;
@@ -848,7 +852,7 @@ const VaseCourseLesson: React.FC = () => {
                 </h3>
 
                 <div className="space-y-1">
-                  {courseModules.map((mod) => {
+                  {modules.map((mod) => {
                     const isOpen = openModuleId === mod.id;
                     const modCompleted = mod.items.every((i) =>
                       completedItems.has(i.id),

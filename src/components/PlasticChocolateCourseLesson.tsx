@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
 import { Button } from "./ui/button";
@@ -20,6 +20,7 @@ import {
   AlertCircle,
   Play,
 } from "lucide-react";
+import { useVideoUrls, injectVideoUrls } from "../lib/useVideoUrls";
 
 // ==========================================
 // Яндекс.Диск — встроенный видеоплеер
@@ -256,7 +257,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Вводный урок", url: "https://disk.yandex.ru/i/ScXLIiCgZbteUw" },
+          { title: "Вводный урок", url: "__VIDEO_0__" },
         ],
         description: "Вводное видео к курсу по пластичному шоколаду.",
       },
@@ -273,7 +274,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Рецепт пластичного шоколада", url: "https://disk.yandex.ru/i/XFKCxrpNLGuZuw" },
+          { title: "Рецепт пластичного шоколада", url: "__VIDEO_1__" },
         ],
         description: "Видео-рецепт приготовления пластичного шоколада на белом шоколаде.",
       },
@@ -304,7 +305,7 @@ const courseModules: LessonModule[] = [
         type: "video-links",
         content: "",
         links: [
-          { title: "Видео-рецепт тёмного пластичного шоколада", url: "https://disk.yandex.ru/i/fRvGbdGxq9CDQg" },
+          { title: "Видео-рецепт тёмного пластичного шоколада", url: "__VIDEO_2__" },
         ],
         description: "Видео-рецепт приготовления пластичного шоколада на тёмном шоколаде.",
       },
@@ -569,6 +570,9 @@ const courseModules: LessonModule[] = [
 // ==========================================
 
 const PlasticChocolateCourseLesson: React.FC = () => {
+  const { urls: videoUrls } = useVideoUrls("plastic-chocolate");
+  const modules = useMemo(() => injectVideoUrls(courseModules, videoUrls), [videoUrls]);
+
   const [activeItem, setActiveItem] = useState<LessonItem>(courseModules[0].items[0]);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
   const [openModuleId, setOpenModuleId] = useState<number>(courseModules[0].id);
@@ -576,7 +580,7 @@ const PlasticChocolateCourseLesson: React.FC = () => {
   const [contentKey, setContentKey] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const totalItems = courseModules.reduce((s, m) => s + m.items.length, 0);
+  const totalItems = modules.reduce((s, m) => s + m.items.length, 0);
   const completedCount = completedItems.size;
   const progress = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
 
@@ -594,7 +598,7 @@ const PlasticChocolateCourseLesson: React.FC = () => {
     }
     setActiveItem(item);
     setContentKey((k) => k + 1);
-    const mod = courseModules.find((m) => m.items.some((i) => i.id === item.id));
+    const mod = modules.find((m) => m.items.some((i) => i.id === item.id));
     if (mod) setOpenModuleId(mod.id);
     setTimeout(() => {
       contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -610,7 +614,7 @@ const PlasticChocolateCourseLesson: React.FC = () => {
     });
   };
 
-  const allItems = courseModules.flatMap((m) => m.items);
+  const allItems = modules.flatMap((m) => m.items);
   const currentIdx = allItems.findIndex((i) => i.id === activeItem.id);
   const prevItem = currentIdx > 0 ? allItems[currentIdx - 1] : null;
   const nextItem = currentIdx < allItems.length - 1 ? allItems[currentIdx + 1] : null;
@@ -722,7 +726,7 @@ const PlasticChocolateCourseLesson: React.FC = () => {
                 </h3>
 
                 <div className="space-y-1">
-                  {courseModules.map((mod) => {
+                  {modules.map((mod) => {
                     const isOpen = openModuleId === mod.id;
                     const modCompleted = mod.items.every((i) =>
                       completedItems.has(i.id),

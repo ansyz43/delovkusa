@@ -6,7 +6,7 @@ as $$
 declare
   phone text;
   otp_code text;
-  sms_api_id text := '2FF769B8-40C7-1797-5A04-9A1DF058223A';
+  sms_api_id text := current_setting('app.sms_api_id', true);
   clean_phone text;
   request_id bigint;
   sms_message text;

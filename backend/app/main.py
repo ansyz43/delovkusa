@@ -42,6 +42,16 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         if settings.ENV == "production":
             response.headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains"
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://accounts.google.com https://telegram.org; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+                "font-src 'self' https://fonts.gstatic.com; "
+                "img-src 'self' data: https://*.yandex.net https://*.yandex.ru blob:; "
+                "media-src 'self' https://*.yandex.net blob:; "
+                "frame-src https://accounts.google.com https://oauth.telegram.org; "
+                "connect-src 'self' https://cloud-api.yandex.net https://accounts.google.com https://oauth2.googleapis.com;"
+            )
         return response
 
 app.add_middleware(SecurityHeadersMiddleware)

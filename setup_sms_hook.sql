@@ -5,7 +5,7 @@ security definer
 as $$
 declare
   result json;
-  sms_api_id text := '2FF769B8-40C7-1797-5A04-9A1DF058223A';
+  sms_api_id text := current_setting('app.sms_api_id', true);
   clean_phone text;
 begin
   clean_phone := regexp_replace(phone, '[^0-9+]', '', 'g');

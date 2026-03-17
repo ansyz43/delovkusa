@@ -34,6 +34,9 @@ __pycache__/
 backend/venv/
 backend/*.db
 .env
+.env.production
+.env.local
+.env.*.local
 
 # Build artifacts
 *.mjs
