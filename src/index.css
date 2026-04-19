@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --color-1: 340 80% 55%;
+    --color-2: 20 90% 60%;
+    --color-3: 280 70% 50%;
+    --color-4: 350 90% 65%;
+    --color-5: 310 80% 55%;
+  }
+}
+
 /* Smooth scroll & elegant defaults */
 html {
   scroll-behavior: smooth;
