@@ -108,23 +108,24 @@ const ZoomableGallery = ({
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-lg overflow-hidden ${className}`}
+      className={`rounded-3xl border border-muted bg-background overflow-hidden shadow-sm ${className}`}
     >
       <div className="relative">
         {/* Main image */}
         <div
-          className="relative overflow-hidden bg-gray-100 flex justify-center items-center p-4 cursor-pointer"
+          className="relative overflow-hidden bg-muted/20 flex justify-center items-center p-4 cursor-pointer"
           onClick={handleImageClick}
         >
           <img
             src={images[currentIndex].src}
             alt={images[currentIndex].alt}
-            className="max-w-full max-h-[400px] object-contain transition-transform duration-300 hover:scale-105"
+            className="max-w-full max-h-[400px] object-contain transition-transform duration-500 hover:scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
           <Button
             variant="outline"
             size="icon"
-            className="absolute bottom-4 right-4 rounded-full bg-white/80 backdrop-blur-sm border-white/30 text-pink-600 hover:bg-white"
+            className="absolute bottom-4 right-4 rounded-full bg-white/90 backdrop-blur-sm border-muted text-pink-600 hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               setIsZoomed(true);
@@ -140,7 +141,7 @@ const ZoomableGallery = ({
           <Button
             variant="outline"
             size="icon"
-            className="ml-2 rounded-full bg-white/80 backdrop-blur-sm border-white/30 text-pink-600 hover:bg-white"
+            className="ml-2 rounded-full bg-white/90 backdrop-blur-sm border-muted text-pink-600 hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               goToPrevious();
@@ -154,7 +155,7 @@ const ZoomableGallery = ({
           <Button
             variant="outline"
             size="icon"
-            className="mr-2 rounded-full bg-white/80 backdrop-blur-sm border-white/30 text-pink-600 hover:bg-white"
+            className="mr-2 rounded-full bg-white/90 backdrop-blur-sm border-muted text-pink-600 hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
             onClick={(e) => {
               e.stopPropagation();
               goToNext();
@@ -167,17 +168,17 @@ const ZoomableGallery = ({
       </div>
 
       {/* Thumbnails */}
-      <div className="flex p-2 gap-2 overflow-x-auto">
+      <div className="flex p-3 gap-2 overflow-x-auto border-t border-muted bg-muted/10">
         {images.map((image, index) => (
           <button
             key={index}
-            className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${index === currentIndex ? "border-pink-500 scale-105" : "border-transparent hover:border-pink-200"}`}
+            className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all duration-200 cursor-pointer ${index === currentIndex ? "border-pink-500 scale-105 shadow-sm" : "border-transparent hover:border-pink-200 opacity-60 hover:opacity-100"}`}
             onClick={() => {
               setCurrentIndex(index);
               resetZoom();
             }}
           >
-            <div className="w-full h-full flex items-center justify-center bg-gray-50">
+            <div className="w-full h-full flex items-center justify-center bg-muted/20">
               <img
                 src={image.src}
                 alt={`Thumbnail ${index + 1}`}
@@ -190,13 +191,13 @@ const ZoomableGallery = ({
 
       {/* Zoom Dialog */}
       <Dialog open={isZoomed} onOpenChange={handleDialogClose}>
-        <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-transparent shadow-2xl border-0">
+        <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-background/95 backdrop-blur-md shadow-2xl border border-muted rounded-3xl overflow-hidden">
           <div className="relative flex flex-col">
             <DialogClose asChild className="absolute top-4 right-4 z-10">
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full bg-white/80 backdrop-blur-sm text-pink-600 border-white/30 hover:bg-white"
+                className="rounded-full bg-white/90 backdrop-blur-sm text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                 onClick={handleDialogClose}
               >
                 <X className="h-5 w-5" />
@@ -204,7 +205,7 @@ const ZoomableGallery = ({
             </DialogClose>
 
             <div
-              className="flex items-center justify-center p-4 overflow-hidden bg-white/10 backdrop-blur-sm rounded-lg"
+              className="flex items-center justify-center p-4 overflow-hidden bg-muted/10 rounded-2xl"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -222,7 +223,7 @@ const ZoomableGallery = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/80 backdrop-blur-sm text-pink-600 border-white/30 hover:bg-white"
+                  className="rounded-full bg-white/90 backdrop-blur-sm text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                   onClick={goToPrevious}
                 >
                   <ChevronLeft className="h-6 w-6" />
@@ -249,7 +250,7 @@ const ZoomableGallery = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/80 backdrop-blur-sm text-pink-600 border-white/30 hover:bg-white"
+                  className="rounded-full bg-white/90 backdrop-blur-sm text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                   onClick={goToNext}
                 >
                   <ChevronRight className="h-6 w-6" />
@@ -258,18 +259,18 @@ const ZoomableGallery = ({
               </div>
             </div>
 
-            <div className="p-4 bg-white/80 backdrop-blur-md rounded-b-lg flex justify-between items-center mt-2">
+            <div className="p-4 bg-background/80 backdrop-blur-md rounded-b-2xl flex justify-between items-center mt-2 border-t border-muted">
               <div className="flex gap-2">
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/80 text-pink-600 border-white/30 hover:bg-white"
+                  className="rounded-full bg-white/90 text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                   onClick={goToPrevious}
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </Button>
 
-                <div className="text-gray-800 text-sm flex items-center ml-2">
+                <div className="text-foreground text-sm flex items-center ml-2">
                   {currentIndex + 1} / {images.length}
                 </div>
               </div>
@@ -278,7 +279,7 @@ const ZoomableGallery = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/80 text-pink-600 border-white/30 hover:bg-white"
+                  className="rounded-full bg-white/90 text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                   onClick={handleZoomOut}
                   disabled={zoomLevel <= 1}
                 >
@@ -288,7 +289,7 @@ const ZoomableGallery = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/80 text-pink-600 border-white/30 hover:bg-white"
+                  className="rounded-full bg-white/90 text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                   onClick={resetZoom}
                   disabled={zoomLevel === 1}
                 >
@@ -298,7 +299,7 @@ const ZoomableGallery = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full bg-white/80 text-pink-600 border-white/30 hover:bg-white"
+                  className="rounded-full bg-white/90 text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                   onClick={handleZoomIn}
                   disabled={zoomLevel >= 4}
                 >
@@ -309,7 +310,7 @@ const ZoomableGallery = ({
               <Button
                 variant="outline"
                 size="icon"
-                className="rounded-full bg-white/80 text-pink-600 border-white/30 hover:bg-white"
+                className="rounded-full bg-white/90 text-pink-600 border-muted hover:bg-white hover:border-pink-200 transition-all duration-300 cursor-pointer"
                 onClick={goToNext}
               >
                 <ChevronRight className="h-5 w-5" />

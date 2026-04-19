@@ -523,7 +523,7 @@ const CakeShop = () => {
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="w-full h-[420px] md:h-[560px]"
+                className="w-full h-[520px] md:h-[700px]"
               >
                 <HeroCarousel images={heroCarouselImages} className="h-full" />
               </motion.div>
