@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import CoursePageLayout from "./CoursePageLayout";
-import ZoomableGallery from "./ZoomableGallery";
 
 const FlowerVaseCourse = () => (
   <CoursePageLayout
@@ -34,21 +33,16 @@ const FlowerVaseCourse = () => (
       "Нюансы крема и лайфхак по остаткам",
       "Галерея готовых работ",
     ]}
-    gallery={
-      <ZoomableGallery
-        images={[
-          { src: "/vaza.jpg", alt: "Ваза с цветами 1" },
-          { src: "/vaza1.jpg", alt: "Ваза с цветами 2" },
-          { src: "/vazaphoto (1).jpg", alt: "Ваза с цветами 3" },
-          { src: "/vazaphoto (3).jpg", alt: "Ваза с цветами 4" },
-          { src: "/vazaphoto (5).jpg", alt: "Ваза с цветами 5" },
-          { src: "/vazaphoto (6).jpg", alt: "Ваза с цветами 6" },
-          { src: "/vazaphoto (7).jpg", alt: "Ваза с цветами 7" },
-          { src: "/vazaphoto (8).jpg", alt: "Ваза с цветами 8" },
-        ]}
-        className="w-full"
-      />
-    }
+    galleryImages={[
+      { src: "/vaza.jpg", alt: "Ваза с цветами 1" },
+      { src: "/vaza1.jpg", alt: "Ваза с цветами 2" },
+      { src: "/vazaphoto (1).jpg", alt: "Ваза с цветами 3" },
+      { src: "/vazaphoto (3).jpg", alt: "Ваза с цветами 4" },
+      { src: "/vazaphoto (5).jpg", alt: "Ваза с цветами 5" },
+      { src: "/vazaphoto (6).jpg", alt: "Ваза с цветами 6" },
+      { src: "/vazaphoto (7).jpg", alt: "Ваза с цветами 7" },
+      { src: "/vazaphoto (8).jpg", alt: "Ваза с цветами 8" },
+    ]}
     testimonialImages={[
       "/otzivvaza (1).jpg",
       "/otzivvaza (4).jpg",

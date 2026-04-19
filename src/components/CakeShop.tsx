@@ -706,8 +706,8 @@ const CakeShop = () => {
                                   <span className="text-sm font-semibold text-pink-600 whitespace-nowrap">{sub.pricePerKg}</span>
                                 </div>
                                 {sub.note && <p className="px-3 pt-1 text-xs text-muted-foreground">{sub.note}</p>}
-                                <div className="p-3">
-                                  <CategoryGallery images={sub.gallery} columns={sub.gallery.length <= 4 ? 2 : 3} />
+                                <div className="p-4">
+                                  <CategoryGallery images={sub.gallery} columns={2} />
                                 </div>
                               </div>
                             ))}
@@ -725,7 +725,7 @@ const CakeShop = () => {
                           <>
                             {cat.gallery.length > 0 && (
                               <div className="mb-6">
-                                <CategoryGallery images={cat.gallery} columns={cat.gallery.length <= 4 ? 2 : 3} />
+                                <CategoryGallery images={cat.gallery} columns={2} />
                               </div>
                             )}
                             <div className="space-y-2">

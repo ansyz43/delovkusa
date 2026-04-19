@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import BuyCourseButton from "./BuyCourseButton";
+import CategoryGallery from "./CategoryGallery";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -39,6 +40,7 @@ interface CoursePageLayoutProps {
   includes: string[];
   learnHref: string;
   gallery?: React.ReactNode;
+  galleryImages?: { src: string; alt: string }[];
   testimonialImages?: string[];
 }
 
@@ -54,6 +56,7 @@ const CoursePageLayout = ({
   includes,
   learnHref,
   gallery,
+  galleryImages,
   testimonialImages,
 }: CoursePageLayoutProps) => {
   const levelLabel =
@@ -141,7 +144,11 @@ const CoursePageLayout = ({
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="flex items-center justify-center"
               >
-                {gallery ? (
+                {galleryImages ? (
+                  <div className="w-full">
+                    <CategoryGallery images={galleryImages} columns={galleryImages.length <= 4 ? 2 : 3} />
+                  </div>
+                ) : gallery ? (
                   <div className="w-full rounded-3xl overflow-hidden shadow-lg">
                     {gallery}
                   </div>
@@ -300,30 +307,15 @@ const CoursePageLayout = ({
                   Отзывы учеников
                 </h2>
               </div>
-              <motion.div
-                variants={staggerContainer}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="mx-auto grid max-w-6xl gap-4 py-8 sm:grid-cols-2 lg:grid-cols-3"
-              >
-                {testimonialImages.map((src, i) => (
-                  <motion.div
-                    key={i}
-                    variants={itemFadeIn}
-                    className="rounded-3xl border overflow-hidden bg-background shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="relative w-full pb-[100%] overflow-hidden">
-                      <img
-                        src={src}
-                        alt={`Отзыв ученика ${i + 1}`}
-                        className="absolute inset-0 object-contain w-full h-full"
-                        loading="lazy"
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+              <div className="pb-8 px-2 md:px-4">
+                <CategoryGallery
+                  images={testimonialImages.map((src, i) => ({
+                    src,
+                    alt: `Отзыв ученика ${i + 1}`,
+                  }))}
+                  columns={testimonialImages.length <= 4 ? 2 : 3}
+                />
+              </div>
             </motion.div>
           </section>
         )}

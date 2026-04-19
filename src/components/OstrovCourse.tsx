@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import CoursePageLayout from "./CoursePageLayout";
-import ZoomableGallery from "./ZoomableGallery";
 
 const OstrovCourse = () => (
   <CoursePageLayout
@@ -36,17 +35,12 @@ const OstrovCourse = () => (
       "Финальный декор  видео (~15 мин)",
       "Бонус: рецепт пирожного Картошка, кейкпопсы и эскимошки",
     ]}
-    gallery={
-      <ZoomableGallery
-        images={[
-          { src: "/ostrov.jpg", alt: "Торт Остров 1" },
-          { src: "/otzivostrov (1).jpg", alt: "Торт Остров 2" },
-          { src: "/otzivostrov (2).jpg", alt: "Торт Остров 3" },
-          { src: "/otzivostrov (3).jpg", alt: "Торт Остров 4" },
-        ]}
-        className="w-full"
-      />
-    }
+    galleryImages={[
+      { src: "/ostrov.jpg", alt: "Торт Остров 1" },
+      { src: "/otzivostrov (1).jpg", alt: "Торт Остров 2" },
+      { src: "/otzivostrov (2).jpg", alt: "Торт Остров 3" },
+      { src: "/otzivostrov (3).jpg", alt: "Торт Остров 4" },
+    ]}
   />
 );
 

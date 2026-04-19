@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import CoursePageLayout from "./CoursePageLayout";
-import ZoomableGallery from "./ZoomableGallery";
 
 const FinishingCreamCourse = () => (
   <CoursePageLayout
@@ -34,19 +33,14 @@ const FinishingCreamCourse = () => (
       "Лайфхак: что делать с остатками крема  видео + рецепт",
       "Расчёт пропорций крема в зависимости от диаметра бисквита",
     ]}
-    gallery={
-      <ZoomableGallery
-        images={[
-          { src: "/cre1.jpg", alt: "Финишный крем 1" },
-          { src: "/cre2.jpg", alt: "Финишный крем 2" },
-          { src: "/cre3.jpg", alt: "Финишный крем 3" },
-          { src: "/cre4.jpg", alt: "Финишный крем 4" },
-          { src: "/cre5.jpg", alt: "Финишный крем 5" },
-          { src: "/cre6.jpg", alt: "Финишный крем 6" },
-        ]}
-        className="w-full"
-      />
-    }
+    galleryImages={[
+      { src: "/cre1.jpg", alt: "Финишный крем 1" },
+      { src: "/cre2.jpg", alt: "Финишный крем 2" },
+      { src: "/cre3.jpg", alt: "Финишный крем 3" },
+      { src: "/cre4.jpg", alt: "Финишный крем 4" },
+      { src: "/cre5.jpg", alt: "Финишный крем 5" },
+      { src: "/cre6.jpg", alt: "Финишный крем 6" },
+    ]}
     testimonialImages={[
       "/otziv crem (1).jpg",
       "/otziv crem (2).jpg",

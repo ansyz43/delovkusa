@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import CoursePageLayout from "./CoursePageLayout";
-import ZoomableGallery from "./ZoomableGallery";
 
 const CourseDetail = () => (
   <CoursePageLayout
@@ -32,22 +31,17 @@ const CourseDetail = () => (
       "Галерея готовых работ для вдохновения",
       "Постоянный доступ ко всем материалам",
     ]}
-    gallery={
-      <ZoomableGallery
-        images={[
-          { src: "/courses/roses/rozaroza (7).jpg", alt: "Роза 1" },
-          { src: "/courses/roses/rozaroza (6).jpg", alt: "Роза 2" },
-          { src: "/courses/roses/rozaroza (5).jpg", alt: "Роза 3" },
-          { src: "/courses/roses/rozaroza (4).jpg", alt: "Роза 4" },
-          { src: "/courses/roses/rozaroza (3).jpg", alt: "Роза 3" },
-          { src: "/courses/roses/rozaroza (1).jpg", alt: "Роза 6" },
-          { src: "/roza roza  (3).jpg", alt: "Розовая роза 7" },
-          { src: "/roza roza  (2).jpg", alt: "Розовая роза 8" },
-          { src: "/roza roza  (1).jpg", alt: "Розовая роза 9" },
-        ]}
-        className="w-full"
-      />
-    }
+    galleryImages={[
+      { src: "/courses/roses/rozaroza (7).jpg", alt: "Роза 1" },
+      { src: "/courses/roses/rozaroza (6).jpg", alt: "Роза 2" },
+      { src: "/courses/roses/rozaroza (5).jpg", alt: "Роза 3" },
+      { src: "/courses/roses/rozaroza (4).jpg", alt: "Роза 4" },
+      { src: "/courses/roses/rozaroza (3).jpg", alt: "Роза 3" },
+      { src: "/courses/roses/rozaroza (1).jpg", alt: "Роза 6" },
+      { src: "/roza roza  (3).jpg", alt: "Розовая роза 7" },
+      { src: "/roza roza  (2).jpg", alt: "Розовая роза 8" },
+      { src: "/roza roza  (1).jpg", alt: "Розовая роза 9" },
+    ]}
     testimonialImages={[
       "/courses/roses/otziv roza  (1).jpg",
       "/courses/roses/otziv roza  (2).jpg",
