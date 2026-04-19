@@ -30,22 +30,25 @@ const SIZES = {
 
 // Тарифы (руб/кг)
 const RATES = {
-  base: { price: 3000, label: "Базовый" },
-  velour: { price: 3200, label: "Велюр" },
-  simple_party: { price: 3200, label: "Нарядный/детский (несложный)" },
-  complex_shape: { price: 3400, label: "Сложная форма/цветы" },
-  tiered: { price: 3500, label: "Ярусный" },
-  "3d": { price: 3600, label: "3D/парящий (от)" },
+  simple: { price: 3300, label: "Простой декор" },
+  medium: { price: 3500, label: "Средний декор" },
+  square: { price: 3700, label: "Квадрат / шоколадные цветы" },
+  tiered_simple: { price: 3800, label: "Ярусный простой" },
+  tiered_complex: { price: 4000, label: "Ярусный сложный (от)" },
+  vase: { price: 3600, label: "Торт-ваза" },
+  "3d_simple": { price: 3600, label: "3D простой (пенёк)" },
+  "3d_medium": { price: 3700, label: "3D средний (коробка, бочка, бургер)" },
+  "3d_complex": { price: 3800, label: "3D сложный (от)" },
+  long: { price: 3800, label: "Длинный узкий" },
 };
 
 const CakeCalculator = () => {
   const [selectedSize, setSelectedSize] = useState<keyof typeof SIZES>("S");
-  const [selectedStyle, setSelectedStyle] = useState<keyof typeof RATES>("base");
+  const [selectedStyle, setSelectedStyle] = useState<keyof typeof RATES>("simple");
   const [isPistachioRaspberry, setIsPistachioRaspberry] = useState(false);
   const [hasPrint, setHasPrint] = useState(false);
   const [figureType, setFigureType] = useState<"none" | "regular" | "portrait">("none");
   const [deliveryType, setDeliveryType] = useState<"none" | "city" | "suburb">("none");
-  const [complexityLevel, setComplexityLevel] = useState<"medium" | "high">("medium");
 
   // Расчет итоговой цены
   const calculation = useMemo(() => {
@@ -55,13 +58,6 @@ const CakeCalculator = () => {
     // Доплата за фисташку-малину
     if (isPistachioRaspberry) {
       ratePerKg += 400;
-    }
-
-    // Для 3D торта учитываем сложность
-    if (selectedStyle === "3d") {
-      if (complexityLevel === "high") {
-        ratePerKg = 4500;
-      }
     }
 
     // Базовая цена торта
@@ -96,7 +92,7 @@ const CakeCalculator = () => {
       deliveryPrice,
       total,
     };
-  }, [selectedSize, selectedStyle, isPistachioRaspberry, hasPrint, figureType, deliveryType, complexityLevel]);
+  }, [selectedSize, selectedStyle, isPistachioRaspberry, hasPrint, figureType, deliveryType]);
 
   return (
     <Card className="w-full max-w-4xl mx-auto bg-gradient-to-br from-pink-50 to-white border-2 border-pink-200">
@@ -161,22 +157,6 @@ const CakeCalculator = () => {
               ))}
             </SelectContent>
           </Select>
-
-          {selectedStyle === "3d" && (
-            <div className="ml-4 space-y-2">
-              <Label>Сложность 3D торта</Label>
-              <RadioGroup value={complexityLevel} onValueChange={(value) => setComplexityLevel(value as "medium" | "high")}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="medium" id="medium" />
-                  <Label htmlFor="medium">Средняя (3600 ₽/кг)</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="high" id="high" />
-                  <Label htmlFor="high">Высокая (4500 ₽/кг)</Label>
-                </div>
-              </RadioGroup>
-            </div>
-          )}
         </div>
 
         {/* Начинка */}

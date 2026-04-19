@@ -22,7 +22,7 @@ from app.auth import (
     create_access_token, create_refresh_token, decode_token,
     get_current_user,
 )
-from app.email_utils import send_welcome_email
+from app.email_utils import send_welcome_email_async
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
@@ -39,10 +39,12 @@ def _get_real_ip(request: Request) -> str:
 limiter = Limiter(key_func=_get_real_ip)
 logger = logging.getLogger(__name__)
 
-# In-memory login attempt tracker
+# In-memory login attempt tracker (capped to prevent memory leak)
 _login_attempts: dict[str, list[float]] = {}
 _LOCKOUT_ATTEMPTS = 5
 _LOCKOUT_WINDOW = 900  # 15 minutes
+_MAX_TRACKED_KEYS = 10_000
+_last_cleanup = 0.0
 
 
 # ==========================================
@@ -78,9 +80,9 @@ async def register(
     await db.commit()
     await db.refresh(user)
 
-    # Send welcome email (fire-and-forget, don't block registration)
+    # Send welcome email (non-blocking via thread executor)
     try:
-        send_welcome_email(data.email, data.name)
+        await send_welcome_email_async(data.email, data.name)
     except Exception:
         logger.exception("Failed to send welcome email to %s", data.email)
 
@@ -119,6 +121,16 @@ async def login(
     client_ip = _get_real_ip(request)
     lockout_key = f"{data.email}:{client_ip}"
     now = time.time()
+    # Periodic cleanup of stale keys to prevent memory leak
+    global _last_cleanup
+    if now - _last_cleanup > _LOCKOUT_WINDOW or len(_login_attempts) > _MAX_TRACKED_KEYS:
+        _login_attempts_copy = {
+            k: [t for t in v if now - t < _LOCKOUT_WINDOW]
+            for k, v in _login_attempts.items()
+        }
+        _login_attempts.clear()
+        _login_attempts.update({k: v for k, v in _login_attempts_copy.items() if v})
+        _last_cleanup = now
     attempts = _login_attempts.get(lockout_key, [])
     # Clean old attempts
     attempts = [t for t in attempts if now - t < _LOCKOUT_WINDOW]

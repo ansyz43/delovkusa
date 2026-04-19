@@ -294,6 +294,7 @@ const UsersTab: React.FC = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [expandedUser, setExpandedUser] = useState<number | null>(null);
 
@@ -305,7 +306,7 @@ const UsersTab: React.FC = () => {
       page: String(page),
       per_page: String(perPage),
     });
-    if (search) params.set("search", search);
+    if (debouncedSearch) params.set("search", debouncedSearch);
     const resp = await apiFetch(`/api/admin/users?${params}`);
     if (resp.ok) {
       const data = await resp.json();
@@ -313,7 +314,12 @@ const UsersTab: React.FC = () => {
       setTotal(data.total);
     }
     setLoading(false);
-  }, [page, search]);
+  }, [page, debouncedSearch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 350);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   useEffect(() => {
     load();

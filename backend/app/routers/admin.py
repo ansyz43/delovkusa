@@ -33,7 +33,10 @@ async def list_users(
     count_q = select(func.count(User.id))
 
     if search:
-        like = f"%{search}%"
+        # Escape LIKE wildcards to prevent unintended pattern matching
+        import re as _re
+        escaped = _re.sub(r'([%_])', r'\\\1', search)
+        like = f"%{escaped}%"
         q = q.where(User.email.ilike(like) | User.name.ilike(like))
         count_q = count_q.where(User.email.ilike(like) | User.name.ilike(like))
 
@@ -72,8 +75,8 @@ async def list_orders(
 ):
     q = (
         select(Order, User.email, User.name, Course.title)
-        .join(User, User.id == Order.user_id)
-        .join(Course, Course.id == Order.course_id)
+        .outerjoin(User, User.id == Order.user_id)
+        .outerjoin(Course, Course.id == Order.course_id)
         .order_by(Order.created_at.desc())
     )
     count_q = select(func.count(Order.id))

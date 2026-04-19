@@ -11,7 +11,7 @@ from app.database import get_db
 from app.models import Course, Order, UserCourseAccess, User
 from app.auth import get_current_user
 from app.schemas import CreatePaymentRequest, CreatePaymentResponse, OrderStatusResponse
-from app.email_utils import send_payment_success_email
+from app.email_utils import send_payment_success_email_async
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
 logger = logging.getLogger(__name__)
@@ -158,12 +158,12 @@ async def yookassa_webhook(request: Request, db: AsyncSession = Depends(get_db))
         await db.commit()
         logger.info("Access granted: user=%s course=%s order=%s", order.user_id, order.course_id, order.id)
 
-        # Send payment confirmation email
+        # Send payment confirmation email (non-blocking)
         try:
             buyer = (await db.execute(select(User).where(User.id == order.user_id))).scalar_one_or_none()
             course = (await db.execute(select(Course).where(Course.id == order.course_id))).scalar_one_or_none()
             if buyer and course:
-                send_payment_success_email(buyer.email, buyer.name, course.title, order.amount)
+                await send_payment_success_email_async(buyer.email, buyer.name, course.title, order.amount)
         except Exception:
             logger.exception("Failed to send payment email for order %s", order.id)
 
