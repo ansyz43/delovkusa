@@ -355,7 +355,6 @@ const CakeShop = () => {
           <nav className="hidden md:flex gap-6">
             <a href="#catalog" className="text-sm font-medium transition-colors hover:text-pink-600 cursor-pointer">Каталог</a>
             <a href="#services" className="text-sm font-medium transition-colors hover:text-pink-600 cursor-pointer">Услуги</a>
-            <a href="#gallery" className="text-sm font-medium transition-colors hover:text-pink-600 cursor-pointer">Галерея</a>
             <Link to="/courses" className="text-sm font-medium transition-colors hover:text-pink-600 cursor-pointer">Для кондитеров</Link>
             <a href="#contacts" className="text-sm font-medium transition-colors hover:text-pink-600 cursor-pointer">Контакты</a>
           </nav>
@@ -411,7 +410,6 @@ const CakeShop = () => {
             {[
               { label: "Каталог", href: "#catalog" },
               { label: "Услуги", href: "#services" },
-              { label: "Галерея", href: "#gallery" },
               { label: "Для кондитеров", href: "/courses", isRoute: true },
               { label: "Контакты", href: "#contacts" },
             ].map((item, index) => (
@@ -779,89 +777,6 @@ const CakeShop = () => {
           </motion.div>
         </section>
 
-        {/* ═══════════════════════════ GALLERY (Bento Grid) ═══════════════════════════ */}
-        <section id="gallery" className="w-full py-12 md:py-24">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="container px-4 md:px-6 border border-muted rounded-3xl"
-          >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center py-10">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="inline-block rounded-full bg-muted px-4 py-1 text-sm"
-              >
-                Галерея
-              </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl font-display font-bold tracking-tight sm:text-4xl md:text-5xl"
-              >
-                Наши работы
-              </motion.h2>
-            </div>
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="mx-auto grid max-w-7xl gap-3 py-12 md:grid-cols-4 md:grid-rows-2"
-            >
-              {/* Large item */}
-              <motion.div
-                variants={itemFadeIn}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-                className="group relative overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 h-[300px] md:h-auto"
-              >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100 z-10" />
-                <img
-                  src="/cakes/medium-decor/2.jpg"
-                  alt="Авторский торт"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 transition-opacity group-hover:opacity-100 z-20">
-                  <h3 className="text-xl font-bold">Авторские торты</h3>
-                  <p className="text-sm">Торты любой сложности на заказ</p>
-                </div>
-              </motion.div>
-              {[
-                { src: "/cakes/choco-teacups/3.jpg", title: "Чайные пары", desc: "Из бельгийского шоколада" },
-                { src: "/cakes/3d/2.jpg", title: "3D торты", desc: "Сложные конструкции" },
-                { src: "/cakes/bombs/2.jpg", title: "Шоколадные бомбы", desc: "Эффектный подарок" },
-                { src: "/cakes/truffles/3.jpg", title: "Трюфели", desc: "24 вкуса ручной работы" },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  variants={itemFadeIn}
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                  className="group relative overflow-hidden rounded-3xl h-[180px] md:h-[200px]"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100 z-10" />
-                  <img
-                    src={item.src}
-                    alt={item.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-end p-4 text-white opacity-0 transition-opacity group-hover:opacity-100 z-20">
-                    <h3 className="text-lg font-bold">{item.title}</h3>
-                    <p className="text-xs">{item.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-        </section>
-
         {/* ═══════════════════════════ ABOUT ═══════════════════════════ */}
         <section className="w-full py-12 md:py-24">
           <motion.div
@@ -878,16 +793,15 @@ const CakeShop = () => {
                 transition={{ duration: 0.6 }}
                 className="space-y-6"
               >
-                <div className="inline-block rounded-full bg-background px-4 py-1 text-sm">О нас</div>
+                <div className="inline-block rounded-full bg-background px-4 py-1 text-sm">О мастере</div>
                 <h2 className="text-3xl font-display font-bold tracking-tight sm:text-4xl">Ирина Гордеева</h2>
                 <p className="text-muted-foreground md:text-lg leading-relaxed">
-                  Кондитер с многолетним опытом, основатель бренда «Дело Вкуса». Работаю только с бельгийским
-                  шоколадом Callebaut, натуральными ингредиентами и свежими ягодами.
+                  Кондитер со стажем работы более 10 лет. Награждена серебряной медалью на английской
+                  онлайн-выставке (Бирмингем) за торт с шоколадными цветами.
                 </p>
                 <p className="text-muted-foreground md:text-lg leading-relaxed">
-                  Каждый торт — авторская работа с индивидуальным подходом к декору и вкусам.
-                  Провожу онлайн-курсы для кондитеров по пластичному шоколаду, финишному крему и
-                  технике создания шоколадных цветов.
+                  Автор рецептов тортов и десертов. Преподающий мастер — веду курсы по пластичному
+                  шоколаду и цветам, а также по 3D-тортам.
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Button variant="outline" size="lg" className="rounded-full cursor-pointer" asChild>

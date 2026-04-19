@@ -1,0 +1,2 @@
+Connection closed by 5.42.100.152 port 22
+C:\WINDOWS\System32\OpenSSH\scp.exe: Connection closed
