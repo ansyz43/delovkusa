@@ -27,10 +27,18 @@ const FlipWords: React.FC<FlipWordsProps> = ({
     return () => clearInterval(interval);
   }, [startAnimation, duration]);
 
+  // Find the longest word to reserve space and prevent layout shift
+  const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), "");
+
   return (
     <span className={`inline-block relative ${className}`}>
+      {/* Invisible spacer — reserves width of the longest word */}
+      <span className="invisible whitespace-nowrap" aria-hidden="true">
+        {longestWord}
+      </span>
+      {/* Visible animated word, positioned absolutely so it doesn't affect layout */}
       <span
-        className="inline-block transition-all duration-400 ease-in-out"
+        className="absolute inset-0 inline-flex items-center justify-center transition-all duration-400 ease-in-out"
         style={{
           opacity: isAnimating ? 0 : 1,
           transform: isAnimating ? "translateY(-12px)" : "translateY(0)",

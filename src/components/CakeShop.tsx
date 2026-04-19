@@ -6,13 +6,11 @@ import {
   Cookie,
   IceCream,
   Sparkles,
-  MessageCircle,
   Phone,
   ChevronRight,
   CupSoda,
   ArrowRight,
   MapPin,
-  Mail,
   Instagram,
   Zap,
   Menu,
@@ -525,7 +523,7 @@ const CakeShop = () => {
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="w-full h-[350px] md:h-[450px]"
+                className="w-full h-[420px] md:h-[560px]"
               >
                 <HeroCarousel images={heroCarouselImages} className="h-full" />
               </motion.div>
@@ -557,7 +555,7 @@ const CakeShop = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="text-3xl font-display font-bold tracking-tight sm:text-4xl md:text-5xl"
               >
-                Что мы создаём
+                Что я создаю
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
@@ -565,7 +563,7 @@ const CakeShop = () => {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="mx-auto max-w-[700px] text-muted-foreground md:text-lg"
               >
-                Полный спектр кондитерских изделий — от классических тортов до сложных шоколадных конструкций
+                Торты на заказ, десерты, шоколадные бомбы и чайные пары — всё вручную, на бельгийском шоколаде Callebaut
               </motion.p>
             </div>
             <motion.div
@@ -864,20 +862,11 @@ const CakeShop = () => {
                   </motion.div>
                   <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
                     <div className="rounded-2xl bg-muted p-2.5">
-                      <Mail className="h-5 w-5 text-pink-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Напишите нам</h3>
-                      <p className="text-sm text-muted-foreground">WhatsApp — самый быстрый способ связи</p>
-                    </div>
-                  </motion.div>
-                  <motion.div whileHover={{ x: 5 }} className="flex items-start gap-3">
-                    <div className="rounded-2xl bg-muted p-2.5">
                       <Phone className="h-5 w-5 text-pink-600" />
                     </div>
                     <div>
                       <h3 className="font-medium">Телефон</h3>
-                      <p className="text-sm text-muted-foreground">По запросу</p>
+                      <a href="tel:+79242337906" className="text-sm text-pink-600 hover:text-pink-700 transition-colors cursor-pointer font-medium">+7 (924) 233-79-06</a>
                     </div>
                   </motion.div>
                 </div>
@@ -905,21 +894,13 @@ const CakeShop = () => {
               >
                 <Button
                   size="lg"
-                  className="bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg shadow-green-200/50 hover:shadow-xl transition-all cursor-pointer text-lg py-6"
+                  className="bg-pink-600 hover:bg-pink-700 text-white rounded-full shadow-lg shadow-pink-200/50 hover:shadow-xl transition-all cursor-pointer text-lg py-6"
                   asChild
                 >
-                  <a href="https://wa.me/" target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    Написать в WhatsApp
+                  <a href="tel:+79242337906">
+                    <Phone className="mr-2 h-5 w-5" />
+                    Позвонить +7 (924) 233-79-06
                   </a>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-pink-300 text-pink-600 hover:bg-pink-50 rounded-full transition-all cursor-pointer text-lg py-6"
-                >
-                  <Phone className="mr-2 h-5 w-5" />
-                  Позвонить
                 </Button>
               </motion.div>
             </div>

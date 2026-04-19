@@ -49,12 +49,12 @@ const CategoryGallery: React.FC<CategoryGalleryProps> = ({
   return (
     <>
       {/* Thumbnail Grid */}
-      <div className={`grid ${gridCols} gap-2 md:gap-3`}>
+      <div className={`grid ${gridCols} gap-3 md:gap-4`}>
         {images.map((image, index) => (
           <button
             key={index}
             onClick={() => openLightbox(index)}
-            className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 focus:outline-none transition-all duration-300 hover:shadow-lg"
+            className="group relative aspect-square overflow-hidden rounded-2xl bg-muted/30 border border-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 transition-all duration-300 hover:shadow-xl hover:border-pink-200 cursor-pointer"
           >
             <img
               src={image.src}
@@ -62,8 +62,11 @@ const CategoryGallery: React.FC<CategoryGalleryProps> = ({
               loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
-              <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-lg" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-medium text-gray-700 shadow-sm">
+                <ZoomIn className="w-3.5 h-3.5" />
+                Открыть
+              </span>
             </div>
           </button>
         ))}

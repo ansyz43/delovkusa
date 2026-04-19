@@ -106,8 +106,11 @@ const CakeCalculator = () => {
           Калькулятор торта
         </CardTitle>
         <CardDescription className="text-base">
-          Рассчитайте стоимость вашего торта за несколько кликов
+          Рассчитайте примерную стоимость вашего торта за несколько кликов
         </CardDescription>
+        <p className="text-xs text-gray-500 mt-2">
+          * Стоимость ориентировочная. Итоговая цена может отличаться в зависимости от сложности декора, начинки и других деталей.
+        </p>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -284,6 +287,9 @@ const CakeCalculator = () => {
             <div className="mt-4 p-3 bg-white rounded-lg text-sm">
               <p className="text-gray-600">
                 ✨ Что входит: минимальный декор + свечи и топпер в подарок
+              </p>
+              <p className="text-gray-400 text-xs mt-2">
+                * Расчёт примерный. Точная стоимость зависит от деталей заказа и уточняется при оформлении.
               </p>
             </div>
           </div>
