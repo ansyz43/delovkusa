@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { useUserCourses } from "../lib/useUserCourses";
@@ -121,15 +122,20 @@ const DashboardCourses = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-purple-50">
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
 
-      <main className="pt-28 pb-16 px-4">
-        <div className="max-w-5xl mx-auto">
+      <main className="flex-1 py-8 md:py-12 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-5xl mx-auto"
+        >
           {/* Навигация */}
           <Link
             to="/dashboard"
-            className="inline-flex items-center text-gray-600 hover:text-pink-600 mb-6 transition-colors"
+            className="inline-flex items-center text-muted-foreground hover:text-pink-600 mb-6 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Личный кабинет
@@ -137,15 +143,13 @@ const DashboardCourses = () => {
 
           <div className="flex items-center gap-3 mb-8">
             <BookOpen className="w-8 h-8 text-pink-600" />
-            <h1 className="text-3xl font-bold text-gray-800">Мои курсы</h1>
+            <h1 className="text-3xl font-display font-bold">Мои курсы</h1>
           </div>
 
           {/* Купленные курсы */}
           {purchasedCourses.length > 0 ? (
             <div className="mb-12">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-                Приобретённые курсы
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {allCourses
@@ -153,7 +157,7 @@ const DashboardCourses = () => {
                   .map((course) => (
                     <Card
                       key={course.id}
-                      className="border-0 shadow-md overflow-hidden hover:shadow-xl transition-all"
+                      className="rounded-3xl border shadow-sm overflow-hidden hover:shadow-lg transition-all bg-background/80"
                     >
                       <div className="flex flex-col sm:flex-row">
                         <div className="sm:w-40 h-32 sm:h-auto bg-gray-200 flex-shrink-0">
@@ -164,13 +168,13 @@ const DashboardCourses = () => {
                           />
                         </div>
                         <div className="flex-1 p-4">
-                          <h3 className="font-semibold text-gray-800 mb-1">
+                          <h3 className="font-semibold mb-1">
                             {course.title}
                           </h3>
-                          <p className="text-gray-500 text-sm mb-3 line-clamp-2">
+                          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                             {course.description}
                           </p>
-                          <div className="flex items-center gap-4 text-xs text-gray-400 mb-3">
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
                             <span className="flex items-center gap-1">
                               <PlayCircle className="w-3 h-3" />
                               {course.lessons} уроков
@@ -208,18 +212,18 @@ const DashboardCourses = () => {
               </div>
             </div>
           ) : (
-            <div className="mb-12 bg-white rounded-2xl shadow-lg p-8 text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="mb-12 rounded-3xl border border-muted bg-background/80 p-8 text-center">
+              <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <BookOpen className="w-8 h-8 text-gray-400" />
               </div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              <h2 className="text-xl font-semibold mb-2">
                 У вас пока нет курсов
               </h2>
-              <p className="text-gray-500 mb-6">
+              <p className="text-muted-foreground mb-6">
                 Выберите курс из каталога и начните обучение уже сегодня!
               </p>
               <Link to="/courses">
-                <Button className="bg-pink-600 hover:bg-pink-700 text-white">
+                <Button className="bg-pink-600 hover:bg-pink-700 text-white rounded-full cursor-pointer">
                   Перейти в каталог
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -230,19 +234,19 @@ const DashboardCourses = () => {
           {/* Купленные техкарты */}
           {purchasedTechCards.length > 0 && (
             <div className="mb-12">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-pink-600" />
                 Мои техкарты
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {purchasedTechCards.map((tc) => (
-                  <Card key={tc.id} className="border-0 shadow-md hover:shadow-lg transition-all">
+                  <Card key={tc.id} className="rounded-3xl border shadow-sm hover:shadow-md transition-all bg-background/80">
                     <CardContent className="p-4 flex items-center gap-3">
                       <div className="bg-pink-100 p-2 rounded-lg flex-shrink-0">
                         <FileText className="w-5 h-5 text-pink-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-800 text-sm truncate">{tc.title}</h3>
+                        <h3 className="font-medium text-sm truncate">{tc.title}</h3>
                         <span className="text-xs text-green-600">PDF</span>
                       </div>
                       <Button
@@ -278,7 +282,7 @@ const DashboardCourses = () => {
 
           {/* Все доступные курсы */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-blue-600" />
               Доступные курсы
             </h2>
@@ -288,7 +292,7 @@ const DashboardCourses = () => {
                 return (
                   <Card
                     key={course.id}
-                    className="border-0 shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    className="rounded-3xl border shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-background/80"
                   >
                     <div className="relative h-40 bg-gray-200">
                       <img
@@ -304,15 +308,15 @@ const DashboardCourses = () => {
                       )}
                     </div>
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-lg text-gray-800">
+                      <CardTitle className="text-lg">
                         {course.title}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-500 text-sm mb-3 line-clamp-2">
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                         {course.description}
                       </p>
-                      <div className="flex items-center gap-4 text-xs text-gray-400 mb-4">
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                         <span className="flex items-center gap-1">
                           <PlayCircle className="w-3 h-3" />
                           {course.lessons} уроков
@@ -362,8 +366,19 @@ const DashboardCourses = () => {
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
+
+      <footer className="w-full border-t">
+        <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row md:py-0">
+          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Дело Вкуса. Все права защищены.</p>
+          <div className="flex gap-4 text-xs">
+            <Link to="/offer" className="text-muted-foreground hover:text-foreground cursor-pointer">Публичная оферта</Link>
+            <Link to="/privacy" className="text-muted-foreground hover:text-foreground cursor-pointer">Политика конфиденциальности</Link>
+          </div>
+          <p className="text-xs text-muted-foreground">ИНН 253615143415</p>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
-import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
-import LinkWithPrefetch from "./LinkWithPrefetch";
+import { Cake, Menu, X, ChevronDown, ChevronRight, User, LogOut } from "lucide-react";
 import { prefetchComponent } from "../lib/prefetch";
 import { useAuth } from "../lib/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+const itemFadeIn = {
+  hidden: { opacity: 0, y: 15 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
 
 interface HeaderProps {
-  logo?: string;
   navLinks?: Array<{ label: string; href: string; hasDropdown?: boolean }>;
 }
 
 const Header = ({
-  logo = "/logo.png",
   navLinks = [
     { label: "Главная", href: "/" },
     { label: "Каталог тортов", href: "/#catalog" },
@@ -23,6 +30,7 @@ const Header = ({
 }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [scrollY, setScrollY] = useState(0);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -31,13 +39,14 @@ const Header = ({
     navigate("/");
   };
 
-  // Предварительно загружаем страницы курсов при монтировании компонента
   useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+
     prefetchComponent("./components/CourseDetail");
     prefetchComponent("./components/FinishingCreamCourse");
     prefetchComponent("./components/FlowerVaseCourse");
 
-    // Закрываем выпадающее меню при клике вне его области
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target.closest(".dropdown-container")) {
@@ -45,361 +54,285 @@ const Header = ({
       }
     };
     document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const toggleDropdown = (label: string) => {
-    if (activeDropdown === label) {
-      setActiveDropdown(null);
-    } else {
-      setActiveDropdown(label);
-    }
+    setActiveDropdown(activeDropdown === label ? null : label);
   };
 
   return (
-    <header className="w-full h-20 bg-white/80 backdrop-blur-lg border-b border-gray-100/50 fixed top-0 left-0 z-50 shadow-sm transition-all duration-500">
-      <div className="container mx-auto h-full px-4 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center">
-          <LinkWithPrefetch
-            href="/"
-            prefetchPath="./components/home"
-            className="flex items-center"
-          >
-            <img src={logo} alt="Кондитерские курсы" className="h-10" />
-            <span className="ml-2 text-xl font-display font-semibold text-gray-800 hidden sm:inline-block whitespace-nowrap">
-              Дело Вкуса
-            </span>
-          </LinkWithPrefetch>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            <div key={link.label} className="relative group dropdown-container">
-              <a
-                href={link.href}
-                className={cn(
-                  "text-gray-600 hover:text-pink-600 transition-all duration-300 font-medium cursor-pointer hover:tracking-wide",
-                  {
-                    "flex items-center": link.hasDropdown,
-                  },
-                )}
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (link.hasDropdown) {
-                    e.stopPropagation();
-                    toggleDropdown(link.label);
-                  } else if (link.href.startsWith("/#")) {
-                    const id = link.href.slice(2);
-                    if (window.location.pathname === "/") {
-                      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-                    } else {
-                      navigate("/");
-                      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }), 300);
-                    }
-                  } else {
-                    navigate(link.href);
-                  }
-                }}
-              >
-                {link.label}
-                {link.hasDropdown && (
-                  <ChevronDown
-                    className={cn("ml-1 h-4 w-4 transition-transform", {
-                      "rotate-180": activeDropdown === link.label,
-                    })}
-                  />
-                )}
-              </a>
-
-              {/* Dropdown for desktop */}
-              {link.hasDropdown && (
-                <div
-                  className={cn(
-                    "absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden transition-all duration-200 origin-top-right z-50 dropdown-container",
-                    activeDropdown === link.label
-                      ? "opacity-100 scale-100"
-                      : "opacity-0 scale-95 pointer-events-none",
-                  )}
-                >
-                  <div className="py-2" onClick={(e) => e.stopPropagation()}>
-                    <a
-                      href="/courses"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer font-semibold"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setActiveDropdown(null);
-                        navigate("/courses");
-                      }}
-                    >
-                      Все курсы
-                    </a>
-                    <div className="border-t border-gray-200 my-1"></div>
-                    <a
-                      href="/courses/roses"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setActiveDropdown(null);
-                        navigate("/courses/roses");
-                      }}
-                    >
-                      Курс «Лепестками роз»
-                    </a>
-                    <a
-                      href="/courses/cream"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setActiveDropdown(null);
-                        navigate("/courses/cream");
-                      }}
-                    >
-                      Курс «Финишный крем»
-                    </a>
-                    <a
-                      href="/courses/vase"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setActiveDropdown(null);
-                        navigate("/courses/vase");
-                      }}
-                    >
-                      Курс «Ваза с цветами»
-                    </a>
-                    <a
-                      href="/courses/ostrov"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setActiveDropdown(null);
-                        navigate("/courses/ostrov");
-                      }}
-                    >
-                      Курс «Остров»
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-
-        {/* CTA Button */}
-        <div className="hidden md:flex items-center gap-2">
-          {user ? (
-            <>
-              <Button
-                variant="outline"
-                className="border-pink-200 text-pink-600 hover:bg-pink-50"
-                onClick={() => navigate("/dashboard")}
-              >
-                <User className="w-4 h-4 mr-2" />
-                Личный кабинет
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSignOut}
-                className="text-gray-500 hover:text-red-600"
-                title="Выйти"
-              >
-                <LogOut className="w-4 h-4" />
-              </Button>
-            </>
-          ) : (
-            <Button
-              className="bg-primary hover:bg-primary/90 text-white"
-              onClick={() => navigate("/auth")}
-            >
-              Войти
-            </Button>
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-gray-600 focus:outline-none"
-          onClick={toggleMenu}
-        >
-          {isMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
-      </div>
-
-      {/* Mobile Navigation */}
-      <div
+    <>
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
         className={cn(
-          "md:hidden bg-white absolute w-full left-0 transition-all duration-300 ease-in-out border-b border-gray-100 shadow-md",
-          isMenuOpen ? "top-20 opacity-100" : "-top-96 opacity-0",
+          "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-shadow",
+          scrollY > 50 && "shadow-md",
         )}
       >
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex flex-col space-y-4">
+        <div className="container flex h-16 items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <motion.div
+              whileHover={{ rotate: 5, scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="h-10 w-10 rounded-2xl bg-pink-600 flex items-center justify-center"
+            >
+              <Cake className="h-5 w-5 text-white" />
+            </motion.div>
+            <span className="font-display font-bold text-xl hidden sm:inline-block">
+              Дело Вкуса
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex gap-6">
             {navLinks.map((link) => (
-              <div key={link.label} className="py-2">
-                <div
-                  className="flex justify-between items-center"
-                  onClick={() => {
+              <div key={link.label} className="relative group dropdown-container">
+                <a
+                  href={link.href}
+                  className={cn(
+                    "text-sm font-medium transition-colors hover:text-pink-600 cursor-pointer",
+                    { "flex items-center": link.hasDropdown },
+                  )}
+                  onClick={(e) => {
+                    e.preventDefault();
                     if (link.hasDropdown) {
+                      e.stopPropagation();
                       toggleDropdown(link.label);
+                    } else if (link.href.startsWith("/#")) {
+                      const id = link.href.slice(2);
+                      if (window.location.pathname === "/") {
+                        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+                      } else {
+                        navigate("/");
+                        setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }), 300);
+                      }
+                    } else {
+                      navigate(link.href);
                     }
                   }}
                 >
-                  <a
-                    href={link.href}
-                    className="text-gray-600 font-medium"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (link.hasDropdown) {
-                        // handled by parent div
-                      } else if (link.href.startsWith("/#")) {
-                        setIsMenuOpen(false);
-                        const id = link.href.slice(2);
-                        if (window.location.pathname === "/") {
-                          document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-                        } else {
-                          navigate("/");
-                          setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }), 300);
-                        }
-                      } else {
-                        setIsMenuOpen(false);
-                        navigate(link.href);
-                      }
-                    }}
-                  >
-                    {link.label}
-                  </a>
+                  {link.label}
                   {link.hasDropdown && (
                     <ChevronDown
-                      className={cn(
-                        "h-5 w-5 text-gray-500 transition-transform",
-                        {
-                          "rotate-180": activeDropdown === link.label,
-                        },
-                      )}
+                      className={cn("ml-1 h-4 w-4 transition-transform", {
+                        "rotate-180": activeDropdown === link.label,
+                      })}
                     />
                   )}
-                </div>
+                </a>
 
-                {/* Mobile dropdown */}
-                {link.hasDropdown && activeDropdown === link.label && (
+                {/* Dropdown */}
+                {link.hasDropdown && (
                   <div
-                    className="mt-2 ml-4 border-l-2 border-gray-200 pl-4"
-                    onClick={(e) => e.stopPropagation()}
+                    className={cn(
+                      "absolute top-full left-0 mt-2 w-48 bg-background shadow-lg rounded-xl overflow-hidden transition-all duration-200 origin-top-right z-50 border dropdown-container",
+                      activeDropdown === link.label
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-95 pointer-events-none",
+                    )}
                   >
-                    <a
-                      href="/courses/roses"
-                      className="block py-2 text-gray-600 hover:text-primary cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsMenuOpen(false);
-                        setActiveDropdown(null);
-                        navigate("/courses/roses");
-                      }}
-                    >
-                      Курс «Лепестками роз»
-                    </a>
-                    <a
-                      href="/courses/cream"
-                      className="block py-2 text-gray-600 hover:text-primary cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsMenuOpen(false);
-                        setActiveDropdown(null);
-                        navigate("/courses/cream");
-                      }}
-                    >
-                      Курс «Финишный крем»
-                    </a>
-                    <a
-                      href="/courses/vase"
-                      className="block py-2 text-gray-600 hover:text-primary cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsMenuOpen(false);
-                        setActiveDropdown(null);
-                        navigate("/courses/vase");
-                      }}
-                    >
-                      Курс «Ваза с цветами»
-                    </a>
-                    <a
-                      href="/courses/ostrov"
-                      className="block py-2 text-gray-600 hover:text-primary cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsMenuOpen(false);
-                        setActiveDropdown(null);
-                        navigate("/courses/ostrov");
-                      }}
-                    >
-                      Курс «Остров»
-                    </a>
+                    <div className="py-2" onClick={(e) => e.stopPropagation()}>
+                      <a
+                        href="/courses"
+                        className="block px-4 py-2 text-sm hover:bg-accent cursor-pointer font-semibold"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setActiveDropdown(null); navigate("/courses"); }}
+                      >
+                        Все курсы
+                      </a>
+                      <div className="border-t my-1" />
+                      {[
+                        { href: "/courses/roses", label: "Курс «Лепестками роз»" },
+                        { href: "/courses/cream", label: "Курс «Финишный крем»" },
+                        { href: "/courses/vase", label: "Курс «Ваза с цветами»" },
+                        { href: "/courses/ostrov", label: "Курс «Остров»" },
+                      ].map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          className="block px-4 py-2 text-sm hover:bg-accent cursor-pointer"
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setActiveDropdown(null); navigate(item.href); }}
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
             ))}
+          </nav>
 
-            <div className="pt-2">
-              {user ? (
-                <div className="flex flex-col gap-2">
-                  <Button
-                    className="w-full bg-pink-600 hover:bg-pink-700 text-white"
-                    onClick={() => {
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full cursor-pointer"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Кабинет
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-full text-muted-foreground hover:text-red-600 cursor-pointer"
+                  onClick={handleSignOut}
+                  title="Выйти"
+                >
+                  <LogOut className="w-4 h-4" />
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                className="rounded-full bg-pink-600 hover:bg-pink-700 cursor-pointer"
+                onClick={() => navigate("/auth")}
+              >
+                Войти
+              </Button>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="flex md:hidden cursor-pointer"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Меню"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+        </div>
+      </motion.header>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 bg-background md:hidden"
+        >
+          <div className="container flex h-16 items-center justify-between">
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="h-10 w-10 rounded-2xl bg-pink-600 flex items-center justify-center">
+                <Cake className="h-5 w-5 text-white" />
+              </div>
+              <span className="font-display font-bold text-xl">Дело Вкуса</span>
+            </Link>
+            <button onClick={() => setIsMenuOpen(false)} className="cursor-pointer" aria-label="Закрыть">
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <motion.nav
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="container grid gap-2 pb-8 pt-6"
+          >
+            {navLinks.map((link, index) => (
+              <motion.div key={index} variants={itemFadeIn}>
+                {link.hasDropdown ? (
+                  <>
+                    <div
+                      className="flex items-center justify-between rounded-2xl px-4 py-3 text-lg font-medium hover:bg-accent cursor-pointer"
+                      onClick={() => toggleDropdown(link.label)}
+                    >
+                      {link.label}
+                      <ChevronDown className={cn("h-5 w-5 transition-transform", { "rotate-180": activeDropdown === link.label })} />
+                    </div>
+                    {activeDropdown === link.label && (
+                      <div className="ml-4 border-l-2 border-muted pl-4 mt-1">
+                        {[
+                          { href: "/courses/roses", label: "Курс «Лепестками роз»" },
+                          { href: "/courses/cream", label: "Курс «Финишный крем»" },
+                          { href: "/courses/vase", label: "Курс «Ваза с цветами»" },
+                          { href: "/courses/ostrov", label: "Курс «Остров»" },
+                        ].map((item) => (
+                          <a
+                            key={item.href}
+                            href={item.href}
+                            className="block py-2 text-muted-foreground hover:text-pink-600 cursor-pointer"
+                            onClick={(e) => { e.preventDefault(); setIsMenuOpen(false); setActiveDropdown(null); navigate(item.href); }}
+                          >
+                            {item.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : link.href.startsWith("/#") ? (
+                  <a
+                    href={link.href}
+                    className="flex items-center justify-between rounded-2xl px-4 py-3 text-lg font-medium hover:bg-accent cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
                       setIsMenuOpen(false);
-                      navigate("/dashboard");
+                      const id = link.href.slice(2);
+                      if (window.location.pathname === "/") {
+                        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+                      } else {
+                        navigate("/");
+                        setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }), 300);
+                      }
                     }}
                   >
+                    {link.label}
+                    <ChevronRight className="h-4 w-4" />
+                  </a>
+                ) : (
+                  <Link
+                    to={link.href}
+                    className="flex items-center justify-between rounded-2xl px-4 py-3 text-lg font-medium hover:bg-accent cursor-pointer"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.label}
+                    <ChevronRight className="h-4 w-4" />
+                  </Link>
+                )}
+              </motion.div>
+            ))}
+            <motion.div variants={itemFadeIn} className="flex flex-col gap-3 pt-4">
+              {user ? (
+                <>
+                  <Button
+                    className="w-full rounded-full cursor-pointer"
+                    onClick={() => { setIsMenuOpen(false); navigate("/dashboard"); }}
+                  >
                     <User className="w-4 h-4 mr-2" />
-                    Личный кабинет
+                    Кабинет
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full border-red-200 text-red-600 hover:bg-red-50"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      handleSignOut();
-                    }}
+                    className="w-full rounded-full border-red-200 text-red-600 hover:bg-red-50 cursor-pointer"
+                    onClick={() => { setIsMenuOpen(false); handleSignOut(); }}
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     Выйти
                   </Button>
-                </div>
+                </>
               ) : (
                 <Button
-                  className="w-full bg-primary hover:bg-primary/90 text-white"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    navigate("/auth");
-                  }}
+                  className="w-full rounded-full bg-pink-600 hover:bg-pink-700 cursor-pointer"
+                  onClick={() => { setIsMenuOpen(false); navigate("/auth"); }}
                 >
                   Войти
                 </Button>
               )}
-            </div>
-          </nav>
-        </div>
-      </div>
-    </header>
+            </motion.div>
+          </motion.nav>
+        </motion.div>
+      )}
+    </>
   );
 };
 

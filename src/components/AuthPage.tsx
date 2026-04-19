@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useAuth } from "../lib/AuthContext";
 import Header from "./Header";
 import { Button } from "./ui/button";
@@ -209,28 +210,33 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-purple-50">
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
 
-      <main className="pt-28 pb-16 px-4">
-        <div className="max-w-md mx-auto">
+      <main className="flex-1 py-8 md:py-12 px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-md mx-auto"
+        >
           <Link
             to="/"
-            className="inline-flex items-center text-gray-600 hover:text-pink-600 mb-6 transition-colors"
+            className="inline-flex items-center text-muted-foreground hover:text-pink-600 mb-6 transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             На главную
           </Link>
 
-          <Card className="shadow-lg border-0">
+          <Card className="rounded-3xl border shadow-sm">
             <CardHeader className="text-center pb-2">
-              <div className="mx-auto w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
+              <div className="mx-auto w-16 h-16 bg-pink-50 rounded-2xl flex items-center justify-center mb-4">
                 <User className="w-8 h-8 text-pink-600" />
               </div>
-              <CardTitle className="text-2xl font-bold text-gray-800">
+              <CardTitle className="text-2xl font-display font-bold">
                 {isLogin ? "Вход в аккаунт" : "Регистрация"}
               </CardTitle>
-              <CardDescription className="text-gray-500">
+              <CardDescription className="text-muted-foreground">
                 {isLogin
                   ? "Войдите, чтобы получить доступ к личному кабинету"
                   : "Создайте аккаунт для доступа к курсам"}
@@ -274,7 +280,7 @@ const AuthPage = () => {
               <form onSubmit={handleEmailSubmit} className="space-y-4">
                   {!isLogin && (
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-gray-700 font-medium">
+                      <Label htmlFor="name" className="text-foreground font-medium">
                         Ваше имя
                       </Label>
                       <div className="relative">
@@ -292,7 +298,7 @@ const AuthPage = () => {
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-700 font-medium">
+                    <Label htmlFor="email" className="text-foreground font-medium">
                       Email
                     </Label>
                     <div className="relative">
@@ -309,7 +315,7 @@ const AuthPage = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-gray-700 font-medium">
+                    <Label htmlFor="password" className="text-foreground font-medium">
                       Пароль
                     </Label>
                     <div className="relative">
@@ -347,13 +353,13 @@ const AuthPage = () => {
                   <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white font-semibold"
+                    className="w-full h-11 bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded-full cursor-pointer"
                   >
                     {loading ? "Загрузка..." : isLogin ? "Войти" : "Зарегистрироваться"}
                   </Button>
 
                   <div className="text-center">
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       {isLogin ? "Нет аккаунта?" : "Уже есть аккаунт?"}{" "}
                       <button
                         type="button"
@@ -367,8 +373,19 @@ const AuthPage = () => {
                 </form>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
       </main>
+
+      <footer className="w-full border-t">
+        <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row md:py-0">
+          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Дело Вкуса. Все права защищены.</p>
+          <div className="flex gap-4 text-xs">
+            <Link to="/offer" className="text-muted-foreground hover:text-foreground cursor-pointer">Публичная оферта</Link>
+            <Link to="/privacy" className="text-muted-foreground hover:text-foreground cursor-pointer">Политика конфиденциальности</Link>
+          </div>
+          <p className="text-xs text-muted-foreground">ИНН 253615143415</p>
+        </div>
+      </footer>
     </div>
   );
 };

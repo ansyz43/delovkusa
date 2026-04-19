@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import Header from "./Header";
@@ -14,6 +15,11 @@ import {
   Shield,
 } from "lucide-react";
 
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
 const Dashboard = () => {
   const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -27,26 +33,31 @@ const Dashboard = () => {
     user?.name || user?.email?.split("@")[0] || "Пользователь";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-purple-50">
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
       <Header />
 
-      <main className="pt-28 pb-16 px-4">
-        <div className="max-w-4xl mx-auto">
+      <main className="flex-1 py-8 md:py-12 px-4">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+          className="max-w-4xl mx-auto"
+        >
           {/* Профиль пользователя */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <div className="rounded-3xl border border-muted bg-background/80 p-8 mb-8">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               <div className="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
                 <User className="w-10 h-10 text-pink-600" />
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-3xl font-bold text-gray-800 mb-1">
-                  Привет, {userName}! 👋
+                <h1 className="text-3xl font-display font-bold mb-1">
+                  Привет, {userName}!
                 </h1>
-                <p className="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+                <p className="text-muted-foreground flex items-center justify-center md:justify-start gap-2">
                   <Mail className="w-4 h-4" />
                   {user?.email}
                 </p>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className="text-muted-foreground/60 text-sm mt-1">
                   Аккаунт создан:{" "}
                   {user?.created_at
                     ? new Date(user.created_at).toLocaleDateString("ru-RU", {
@@ -72,17 +83,17 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Мои курсы */}
             <Link to="/dashboard/courses" className="group">
-              <Card className="h-full border-0 shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+              <Card className="h-full rounded-3xl border shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 bg-background/80">
                 <CardHeader className="pb-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
+                  <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-blue-100 transition-colors">
                     <BookOpen className="w-6 h-6 text-blue-600" />
                   </div>
-                  <CardTitle className="text-lg text-gray-800">
+                  <CardTitle className="text-lg">
                     Мои курсы
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     Просмотр купленных курсов, прогресс обучения и доступ к
                     материалам
                   </p>
@@ -92,17 +103,17 @@ const Dashboard = () => {
 
             {/* Каталог курсов */}
             <Link to="/courses" className="group">
-              <Card className="h-full border-0 shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+              <Card className="h-full rounded-3xl border shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 bg-background/80">
                 <CardHeader className="pb-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-purple-200 transition-colors">
+                  <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-purple-100 transition-colors">
                     <Award className="w-6 h-6 text-purple-600" />
                   </div>
-                  <CardTitle className="text-lg text-gray-800">
+                  <CardTitle className="text-lg">
                     Каталог курсов
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     Просмотр всех доступных курсов и покупка новых программ
                     обучения
                   </p>
@@ -113,17 +124,17 @@ const Dashboard = () => {
             {/* Админ-панель (только для админов) */}
             {isAdmin && (
               <Link to="/admin" className="group">
-                <Card className="h-full border-0 shadow-md hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 border-l-4 border-l-red-400">
+                <Card className="h-full rounded-3xl border shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 bg-background/80 border-l-4 border-l-red-400">
                   <CardHeader className="pb-3">
-                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-red-200 transition-colors">
+                    <div className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mb-3 group-hover:bg-red-100 transition-colors">
                       <Shield className="w-6 h-6 text-red-600" />
                     </div>
-                    <CardTitle className="text-lg text-gray-800">
+                    <CardTitle className="text-lg">
                       Админ-панель
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       Статистика, управление пользователями и заказами
                     </p>
                   </CardContent>
@@ -133,24 +144,35 @@ const Dashboard = () => {
           </div>
 
           {/* Быстрая статистика */}
-          <div className="mt-8 bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <div className="mt-8 rounded-3xl border border-muted bg-background/80 p-8">
+            <h2 className="text-xl font-display font-bold mb-6 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-pink-600" />
               Ваша активность
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="text-center p-4 bg-pink-50 rounded-xl">
+              <div className="text-center p-4 bg-pink-50 rounded-2xl">
                 <p className="text-3xl font-bold text-pink-600">0</p>
-                <p className="text-gray-600 text-sm mt-1">Курсов приобретено</p>
+                <p className="text-muted-foreground text-sm mt-1">Курсов приобретено</p>
               </div>
-              <div className="text-center p-4 bg-blue-50 rounded-xl">
+              <div className="text-center p-4 bg-blue-50 rounded-2xl">
                 <p className="text-3xl font-bold text-blue-600">0</p>
-                <p className="text-gray-600 text-sm mt-1">Уроков пройдено</p>
+                <p className="text-muted-foreground text-sm mt-1">Уроков пройдено</p>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </main>
+
+      <footer className="w-full border-t">
+        <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row md:py-0">
+          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Дело Вкуса. Все права защищены.</p>
+          <div className="flex gap-4 text-xs">
+            <Link to="/offer" className="text-muted-foreground hover:text-foreground cursor-pointer">Публичная оферта</Link>
+            <Link to="/privacy" className="text-muted-foreground hover:text-foreground cursor-pointer">Политика конфиденциальности</Link>
+          </div>
+          <p className="text-xs text-muted-foreground">ИНН 253615143415</p>
+        </div>
+      </footer>
     </div>
   );
 };
