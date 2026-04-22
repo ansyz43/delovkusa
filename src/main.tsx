@@ -40,6 +40,14 @@ window.addEventListener("unhandledrejection", (event) => {
 // Предварительно загружаем основные маршруты
 prefetchMainRoutes();
 
+// Сбрасываем флаг перезагрузки после успешной загрузки страницы,
+// чтобы в следующий раз auto-reload снова сработал при необходимости.
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    sessionStorage.removeItem("__chunk_reloaded");
+  }, 3000);
+});
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter basename={basename}>

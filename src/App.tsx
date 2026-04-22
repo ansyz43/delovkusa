@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedCourseRoute from "./components/ProtectedCourseRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Используем ленивую загрузку для компонентов страниц
 const CakeShop = lazy(() => import("./components/CakeShop"));
@@ -28,6 +29,7 @@ const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
 
 function App() {
   return (
+    <ErrorBoundary>
     <Suspense
       fallback={
         <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-pink-50 to-white">
@@ -114,6 +116,7 @@ function App() {
         />
       </Routes>
     </Suspense>
+    </ErrorBoundary>
   );
 }
 
