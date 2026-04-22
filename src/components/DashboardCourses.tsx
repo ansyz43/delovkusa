@@ -372,8 +372,9 @@ const DashboardCourses = () => {
       <footer className="w-full border-t">
         <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row md:py-0">
           <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Дело Вкуса. Все права защищены.</p>
-          <div className="flex gap-4 text-xs">
+          <div className="flex gap-4 text-xs flex-wrap justify-center">
             <Link to="/offer" className="text-muted-foreground hover:text-foreground cursor-pointer">Публичная оферта</Link>
+            <Link to="/terms" className="text-muted-foreground hover:text-foreground cursor-pointer">Пользовательское соглашение</Link>
             <Link to="/privacy" className="text-muted-foreground hover:text-foreground cursor-pointer">Политика конфиденциальности</Link>
           </div>
           <p className="text-xs text-muted-foreground">ИНН 253615143415</p>

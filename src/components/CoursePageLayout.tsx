@@ -353,9 +353,12 @@ const CoursePageLayout = ({
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Дело Вкуса. Все права защищены.
           </p>
-          <div className="flex gap-4 text-xs">
+          <div className="flex gap-4 text-xs flex-wrap justify-center">
             <Link to="/offer" className="text-muted-foreground hover:text-foreground cursor-pointer">
               Публичная оферта
+            </Link>
+            <Link to="/terms" className="text-muted-foreground hover:text-foreground cursor-pointer">
+              Пользовательское соглашение
             </Link>
             <Link to="/privacy" className="text-muted-foreground hover:text-foreground cursor-pointer">
               Политика конфиденциальности

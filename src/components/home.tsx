@@ -554,6 +554,7 @@ const Home = () => {
             <h3 className="text-lg font-medium mb-4">Документы</h3>
             <nav className="flex flex-col space-y-2 text-sm">
               <Link to="/offer" className="text-muted-foreground hover:text-foreground cursor-pointer">Публичная оферта</Link>
+              <Link to="/terms" className="text-muted-foreground hover:text-foreground cursor-pointer">Пользовательское соглашение</Link>
               <Link to="/privacy" className="text-muted-foreground hover:text-foreground cursor-pointer">Политика конфиденциальности</Link>
             </nav>
           </div>

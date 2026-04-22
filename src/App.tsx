@@ -26,6 +26,7 @@ const PaymentReturn = lazy(() => import("./components/PaymentReturn"));
 const AdminPanel = lazy(() => import("./components/AdminPanel"));
 const PublicOffer = lazy(() => import("./components/PublicOffer"));
 const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
+const UserAgreement = lazy(() => import("./components/UserAgreement"));
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
         <Route path="/payment/return" element={<PaymentReturn />} />
         <Route path="/offer" element={<PublicOffer />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<UserAgreement />} />
         <Route
           path="/dashboard"
           element={
