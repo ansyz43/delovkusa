@@ -75,5 +75,13 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-compression": "^0.5.1"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "Edge >= 88",
+    "not dead",
+    "not IE 11"
+  ]
 }

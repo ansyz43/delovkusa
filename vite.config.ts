@@ -26,6 +26,8 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+    target: ["es2020", "edge88", "firefox78", "chrome87", "safari14"],
+    cssTarget: ["edge88", "firefox78", "chrome87", "safari14"],
     minify: "terser",
     terserOptions: {
       compress: {
