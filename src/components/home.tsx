@@ -17,6 +17,7 @@ import {
 import { Button } from "./ui/button";
 import { GradientText } from "./ui/gradient-text";
 import { useAuth } from "../lib/AuthContext";
+import TechCardsCatalog from "./TechCardsCatalog";
 
 // ==========================================
 // Animation variants
@@ -398,6 +399,9 @@ const Home = () => {
             </motion.div>
           </motion.div>
         </section>
+
+        {/* ═══════════════════════════ TECH CARDS ═══════════════════════════ */}
+        <TechCardsCatalog />
 
         {/* ═══════════════════════════ ADVANTAGES ═══════════════════════════ */}
         <section id="advantages" className="w-full py-12 md:py-24">
