@@ -66,28 +66,6 @@
     
     <!-- Верификация Яндекс.Вебмастер -->
     <meta name="yandex-verification" content="f7a48650f3a98eac" />
-    
-    <!-- Яндекс.Метрика -->
-    <script type="text/javascript">
-        (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108713751', 'ym');
-    
-        ym(108713751, 'init', {
-            ssr:true,
-            webvisor:true,
-            clickmap:true,
-            ecommerce:"dataLayer",
-            referrer: document.referrer,
-            url: location.href,
-            accurateTrackBounce:true,
-            trackLinks:true
-        });
-    </script>
-    <!-- /Яндекс.Метрика -->
   </head>
   <body>
     <!-- Яндекс.Метрика noscript -->
@@ -131,6 +109,39 @@
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
-    
+
+    <!-- Диагностика: если через 12 сек JS не стартовал — показываем диагностику -->
+    <script>
+      (function() {
+        window.__appStarted = false;
+        // React ставит флаг через main.tsx
+        setTimeout(function() {
+          if (window.__appStarted) return;
+          var loader = document.getElementById('initial-loader');
+          if (!loader) return;
+          var info = document.createElement('div');
+          info.style.cssText = 'margin-top:24px;padding:12px 16px;background:#fff;border:1px solid #fbcfe8;border-radius:12px;max-width:320px;font-size:13px;color:#6b7280;text-align:center;';
+          info.innerHTML = 'Сайт загружается дольше обычного. Попробуйте:<br><br>1. Потянуть страницу вниз для обновления<br>2. Настройки → Safari → Очистить историю<br>3. Откройте в приватной вкладке<br><br><a href="https://delovkusa.site/?r=' + Date.now() + '" style="color:#db2777;font-weight:600;">Обновить принудительно</a>';
+          loader.appendChild(info);
+        }, 12000);
+      })();
+    </script>
+    <script type="text/javascript">
+      (function() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://mc.yandex.ru/metrika/tag.js?id=108713751';
+        document.body.appendChild(s);
+        window.ym = window.ym || function() { (window.ym.a = window.ym.a || []).push(arguments); };
+        window.ym.l = 1 * new Date();
+        window.ym(108713751, 'init', {
+          webvisor: true,
+          clickmap: true,
+          accurateTrackBounce: true,
+          trackLinks: true
+        });
+      })();
+    </script>
+    <!-- /Яндекс.Метрика -->
   </body>
 </html>

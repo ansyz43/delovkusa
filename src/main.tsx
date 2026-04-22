@@ -103,3 +103,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </HelmetProvider>
   </React.StrictMode>,
 );
+
+// Сигнал диагностическому скрипту в index.html: JS стартовал
+// @ts-expect-error custom flag
+window.__appStarted = true;
