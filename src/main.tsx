@@ -8,6 +8,39 @@ import { AuthProvider } from "./lib/AuthContext";
 
 const basename = import.meta.env.BASE_URL;
 
+// ═══════════════════════════════════════════════════════════
+// Защита от ошибок removeChild/insertBefore, которые вызывают
+// встроенные переводчики (Edge Translate, Google Translate,
+// Яндекс.Переводчик) — они подменяют текстовые ноды DOM,
+// и React не может их потом удалить, падает весь экран в белый.
+// ═══════════════════════════════════════════════════════════
+if (typeof Node !== "undefined") {
+  const origRemoveChild = Node.prototype.removeChild;
+  Node.prototype.removeChild = function <T extends Node>(child: T): T {
+    if (child.parentNode !== this) {
+      if (child.parentNode) {
+        return (child.parentNode as Node).removeChild(child) as T;
+      }
+      return child;
+    }
+    // @ts-expect-error call original
+    return origRemoveChild.call(this, child) as T;
+  } as typeof Node.prototype.removeChild;
+
+  const origInsertBefore = Node.prototype.insertBefore;
+  Node.prototype.insertBefore = function <T extends Node>(
+    newNode: T,
+    referenceNode: Node | null
+  ): T {
+    if (referenceNode && referenceNode.parentNode !== this) {
+      // @ts-expect-error call original
+      return origInsertBefore.call(this, newNode, null) as T;
+    }
+    // @ts-expect-error call original
+    return origInsertBefore.call(this, newNode, referenceNode) as T;
+  } as typeof Node.prototype.insertBefore;
+}
+
 // Автоматически перезагружаем страницу при ошибке загрузки чанка
 // (старый HTML ссылается на уже несуществующие JS-файлы после деплоя)
 window.addEventListener("error", (event) => {
