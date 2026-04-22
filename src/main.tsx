@@ -44,31 +44,41 @@ if (typeof Node !== "undefined") {
 
 // Автоматически перезагружаем страницу при ошибке загрузки чанка
 // (старый HTML ссылается на уже несуществующие JS-файлы после деплоя)
+// Reload только если упал РЕАЛЬНЫЙ JS-чанк нашего сайта (/assets/*.js).
+// Это защищает от ситуаций, когда какой-то сторонний скрипт
+// (метрика, переводчик, расширение) кидает ошибку с похожим текстом
+// и вызывает бесконечный цикл перезагрузок.
+const isRealChunkError = (msg: string, url?: string) => {
+  const m = msg || "";
+  const u = url || "";
+  const chunkLike =
+    m.includes("Loading chunk") ||
+    m.includes("Failed to fetch dynamically imported module") ||
+    m.includes("error loading dynamically imported module") ||
+    m.includes("Importing a module script failed");
+  if (!chunkLike) return false;
+  // Если URL известен — проверим что это наш /assets/*.js
+  if (u) return /\/assets\/.+\.js/.test(u);
+  // Если URL не передан — считаем подозрительным только когда точно сказано про chunk
+  return m.includes("Loading chunk") || m.includes("error loading dynamically imported module");
+};
+
+const tryReloadOnce = () => {
+  if (!sessionStorage.getItem("__chunk_reloaded")) {
+    sessionStorage.setItem("__chunk_reloaded", "1");
+    window.location.reload();
+  }
+};
+
 window.addEventListener("error", (event) => {
   const msg = event.message || "";
-  if (
-    msg.includes("Loading chunk") ||
-    msg.includes("Failed to fetch dynamically imported module") ||
-    msg.includes("Importing a module script failed")
-  ) {
-    if (!sessionStorage.getItem("__chunk_reloaded")) {
-      sessionStorage.setItem("__chunk_reloaded", "1");
-      window.location.reload();
-    }
-  }
+  // @ts-expect-error filename есть на ErrorEvent
+  const url = event.filename || "";
+  if (isRealChunkError(msg, url)) tryReloadOnce();
 });
 window.addEventListener("unhandledrejection", (event) => {
   const msg = String(event.reason?.message || event.reason || "");
-  if (
-    msg.includes("Loading chunk") ||
-    msg.includes("Failed to fetch dynamically imported module") ||
-    msg.includes("Importing a module script failed")
-  ) {
-    if (!sessionStorage.getItem("__chunk_reloaded")) {
-      sessionStorage.setItem("__chunk_reloaded", "1");
-      window.location.reload();
-    }
-  }
+  if (isRealChunkError(msg)) tryReloadOnce();
 });
 
 // Предварительно загружаем основные маршруты

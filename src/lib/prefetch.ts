@@ -1,22 +1,19 @@
 /**
- * Функция для предварительной загрузки компонентов страниц
- * @param path Путь к компоненту для предварительной загрузки
+ * Prefetch основных роутов.
+ *
+ * ВАЖНО: раньше здесь был `import(/* @vite-ignore *\/ path)` с путями
+ * вроде "./components/home". В prod-сборке это вызывало 404 и
+ * unhandledrejection → автоматический reload страницы → сайт висел
+ * в бесконечной загрузке на мобильных.
+ *
+ * Сейчас prefetch отключён — Vite сам делает code-splitting и
+ * подгружает чанки при переходах по роутам. Ручной prefetch не нужен.
  */
-export const prefetchComponent = (path: string) => {
-  // Создаем динамический импорт, который будет загружать компонент в фоновом режиме
-  import(/* @vite-ignore */ path).catch(() => {
-    // Игнорируем ошибки, так как это только предварительная загрузка
-  });
+export const prefetchComponent = (_path: string) => {
+  // no-op
 };
 
-/**
- * Предварительно загружает все основные компоненты страниц
- */
 export const prefetchMainRoutes = () => {
-  // Предварительно загружаем основные страницы
-  prefetchComponent("./components/home");
-  prefetchComponent("./components/CourseDetail");
-  prefetchComponent("./components/FinishingCreamCourse");
-  prefetchComponent("./components/FlowerVaseCourse");
-  prefetchComponent("./components/OstrovCourse");
+  // no-op
 };
+
