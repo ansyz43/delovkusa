@@ -7,6 +7,7 @@ interface Props {
 interface State {
   hasError: boolean;
   error?: Error;
+  isChunkError?: boolean;
 }
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -15,22 +16,30 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     this.state = { hasError: false };
   }
 
+  componentDidMount() {
+    // Сбрасываем флаг после успешного монтирования, чтобы при следующей
+    // chunk-ошибке reload снова отработал.
+    if (sessionStorage.getItem("__chunk_reloaded")) {
+      sessionStorage.removeItem("__chunk_reloaded");
+    }
+  }
+
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    const msg = String(error?.message || "");
+    const isChunkError =
+      msg.includes("Loading chunk") ||
+      msg.includes("Failed to fetch dynamically imported module") ||
+      msg.includes("Importing a module script failed") ||
+      msg.includes("ChunkLoadError") ||
+      msg.includes("error loading dynamically imported module");
+    return { hasError: true, error, isChunkError };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     // eslint-disable-next-line no-console
     console.error("[ErrorBoundary] render error:", error, errorInfo);
 
-    const msg = String(error?.message || "");
-    const isChunkError =
-      msg.includes("Loading chunk") ||
-      msg.includes("Failed to fetch dynamically imported module") ||
-      msg.includes("Importing a module script failed") ||
-      msg.includes("ChunkLoadError");
-
-    if (isChunkError && !sessionStorage.getItem("__chunk_reloaded")) {
+    if (this.state.isChunkError && !sessionStorage.getItem("__chunk_reloaded")) {
       sessionStorage.setItem("__chunk_reloaded", "1");
       window.location.reload();
     }
@@ -48,6 +57,17 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      // При ошибке загрузки чанка не показываем экран ошибки —
+      // componentDidCatch уже запустил reload(). Показываем лоадер.
+      if (this.state.isChunkError) {
+        return (
+          <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-pink-50 to-white">
+            <div className="w-10 h-10 border-4 border-pink-200 border-t-pink-600 rounded-full animate-spin" />
+            <p className="mt-4 text-sm text-gray-400">Загрузка...</p>
+          </div>
+        );
+      }
+
       return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-pink-50 to-white px-4 text-center">
           <div className="max-w-md rounded-3xl border border-pink-100 bg-white p-8 shadow-sm">
