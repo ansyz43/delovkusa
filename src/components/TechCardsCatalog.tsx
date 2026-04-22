@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../lib/AuthContext";
+import { usePaymentConsent } from "./PaymentConsent";
 import { useUserCourses } from "../lib/useUserCourses";
 import { apiFetch } from "../lib/api";
 import { Button } from "./ui/button";
@@ -113,12 +114,15 @@ const TechCardsCatalog: React.FC = () => {
   const { courseIds, loading: accessLoading } = useUserCourses();
   const [buyingId, setBuyingId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { requestConsent, ConsentDialog } = usePaymentConsent();
 
   const handleBuy = async (tcId: string) => {
     if (!user) {
       navigate("/auth");
       return;
     }
+    const agreed = await requestConsent();
+    if (!agreed) return;
     setBuyingId(tcId);
     try {
       const resp = await apiFetch("/api/payments/create", {
@@ -279,6 +283,7 @@ const TechCardsCatalog: React.FC = () => {
           })}
         </motion.div>
       </motion.div>
+      <ConsentDialog />
     </section>
   );
 };

@@ -5,6 +5,7 @@ import { useUserCourses } from "../lib/useUserCourses";
 import { apiFetch } from "../lib/api";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
+import { usePaymentConsent } from "./PaymentConsent";
 
 interface BuyCourseButtonProps {
   courseId: string;
@@ -26,6 +27,7 @@ const BuyCourseButton: React.FC<BuyCourseButtonProps> = ({
   const { courseIds, loading: accessLoading } = useUserCourses();
   const [buying, setBuying] = useState(false);
   const navigate = useNavigate();
+  const { requestConsent, ConsentDialog } = usePaymentConsent();
 
   const hasAccess = courseIds.includes(courseId);
 
@@ -34,6 +36,8 @@ const BuyCourseButton: React.FC<BuyCourseButtonProps> = ({
       navigate("/auth");
       return;
     }
+    const agreed = await requestConsent();
+    if (!agreed) return;
     setBuying(true);
     try {
       const resp = await apiFetch("/api/payments/create", {
@@ -69,20 +73,23 @@ const BuyCourseButton: React.FC<BuyCourseButtonProps> = ({
     }
 
     return (
-      <button
-        onClick={handleBuy}
-        disabled={buying}
-        className={`inline-flex items-center justify-center bg-pink-600 hover:bg-pink-700 text-white px-8 py-6 text-lg rounded-md font-medium transition-colors disabled:opacity-60 ${className}`}
-      >
-        {buying ? (
-          <>
-            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-            Переход к оплате...
-          </>
-        ) : (
-          `Купить за ${price}`
-        )}
-      </button>
+      <>
+        <button
+          onClick={handleBuy}
+          disabled={buying}
+          className={`inline-flex items-center justify-center bg-pink-600 hover:bg-pink-700 text-white px-8 py-6 text-lg rounded-md font-medium transition-colors disabled:opacity-60 ${className}`}
+        >
+          {buying ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Переход к оплате...
+            </>
+          ) : (
+            `Купить за ${price}`
+          )}
+        </button>
+        <ConsentDialog />
+      </>
     );
   }
 
@@ -129,6 +136,7 @@ const BuyCourseButton: React.FC<BuyCourseButtonProps> = ({
       <div className="flex items-center text-2xl font-bold text-gray-800">
         {price}
       </div>
+      <ConsentDialog />
     </div>
   );
 };

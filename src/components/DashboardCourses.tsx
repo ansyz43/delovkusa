@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
+import { usePaymentConsent } from "./PaymentConsent";
 import { useUserCourses } from "../lib/useUserCourses";
 import { apiFetch } from "../lib/api";
 import Header from "./Header";
@@ -96,11 +97,14 @@ const DashboardCourses = () => {
   const { user, isAdmin } = useAuth();
   const { courseIds: purchasedCourseIds, loading: coursesLoading } = useUserCourses();
   const [buyingTcId, setBuyingTcId] = useState<string | null>(null);
+  const { requestConsent, ConsentDialog } = usePaymentConsent();
 
   const purchasedTechCards = allTechCards.filter((tc) => purchasedCourseIds.includes(tc.id));
   const purchasedCourses = allCourses.filter((c) => purchasedCourseIds.includes(c.id));
 
   const handleBuyTechCard = async (tcId: string) => {
+    const agreed = await requestConsent();
+    if (!agreed) return;
     setBuyingTcId(tcId);
     try {
       const resp = await apiFetch("/api/payments/create", {
@@ -380,6 +384,7 @@ const DashboardCourses = () => {
           <p className="text-xs text-muted-foreground">ИНН 253615143415</p>
         </div>
       </footer>
+      <ConsentDialog />
     </div>
   );
 };
