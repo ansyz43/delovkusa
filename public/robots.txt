@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /payment/
+Disallow: /auth
+
+# Яндекс-специфичные директивы
+Host: https://delovkusa.site
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term
+Clean-param: yclid&gclid&fbclid
+
+Sitemap: https://delovkusa.site/sitemap.xml

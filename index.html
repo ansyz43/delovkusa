@@ -5,8 +5,90 @@
     <meta name="google" content="notranslate" />
     <meta http-equiv="Content-Language" content="ru" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#db2777" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Дело Вкуса - Кондитерские курсы</title>
+    <title>Торты на заказ во Владивостоке | Дело Вкуса — кондитерские курсы онлайн</title>
+    <meta name="description" content="Авторские торты на заказ во Владивостоке от 3 300 ₽/кг: 3D торты, ярусные, бомбы, тарты, капкейки. Онлайн-курсы кондитера: пластичный шоколад, цветы, финишный крем. +7 (924) 233-79-06" />
+    <meta name="keywords" content="торты на заказ владивосток, заказать торт владивосток, кондитерская владивосток, 3d торты владивосток, свадебный торт владивосток, кондитерские курсы онлайн, курсы кондитера, пластичный шоколад курс" />
+    <meta name="author" content="Ирина Гордеева" />
+    <meta name="geo.region" content="RU-PRI" />
+    <meta name="geo.placename" content="Владивосток" />
+    <link rel="canonical" href="https://delovkusa.site/" />
+    
+    <!-- Open Graph fallback (до загрузки React) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Дело Вкуса" />
+    <meta property="og:title" content="Торты на заказ во Владивостоке | Дело Вкуса" />
+    <meta property="og:description" content="Авторские торты во Владивостоке от 3 300 ₽/кг. Онлайн-курсы кондитера от Ирины Гордеевой." />
+    <meta property="og:url" content="https://delovkusa.site/" />
+    <meta property="og:image" content="https://delovkusa.site/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Schema.org статический JSON-LD для Яндекса (виден без JS) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Дело Вкуса",
+      "alternateName": "Delo Vkusa",
+      "url": "https://delovkusa.site",
+      "logo": "https://delovkusa.site/logo.png",
+      "description": "Кондитерская во Владивостоке: торты на заказ и онлайн-курсы по кондитерскому мастерству от Ирины Гордеевой",
+      "founder": {
+        "@type": "Person",
+        "name": "Ирина Гордеева",
+        "jobTitle": "Кондитер-преподаватель"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Владивосток",
+        "addressRegion": "Приморский край",
+        "addressCountry": "RU"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+7-924-233-79-06",
+        "contactType": "customer service",
+        "areaServed": "RU",
+        "availableLanguage": "Russian"
+      },
+      "sameAs": ["https://instagram.com/ira.gordeeva_"]
+    }
+    </script>
+    
+    <!-- Preconnect для ускорения загрузки -->
+    <link rel="preconnect" href="https://mc.yandex.ru" />
+    <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+    <link rel="preconnect" href="https://mc.yandex.com" />
+    
+    <!-- Верификация Яндекс.Вебмастер -->
+    <meta name="yandex-verification" content="f7a48650f3a98eac" />
+    
+    <!-- Яндекс.Метрика -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108713751', 'ym');
+    
+        ym(108713751, 'init', {
+            ssr:true,
+            webvisor:true,
+            clickmap:true,
+            ecommerce:"dataLayer",
+            referrer: document.referrer,
+            url: location.href,
+            accurateTrackBounce:true,
+            trackLinks:true
+        });
+    </script>
+    <!-- /Яндекс.Метрика -->
+    
     <!-- Предзагрузка ключевых изображений с высоким приоритетом -->
     <link rel="preload" href="roza1.jpg" as="image" fetchpriority="high" />
     <link rel="preload" href="roza2.jpg" as="image" fetchpriority="high" />
@@ -32,6 +114,9 @@
     </style>
   </head>
   <body>
+    <!-- Яндекс.Метрика noscript -->
+    <noscript><div><img src="https://mc.yandex.ru/watch/108713751" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    
     <!-- Предзагрузка фоновых изображений через скрытые элементы -->
     <div class="bg-preload">
       <img src="roza1.jpg" alt="" />
@@ -42,7 +127,38 @@
       <img src="cre2.jpg" alt="" />
       <img src="cre3.jpg" alt="" />
     </div>
-    <div id="root"></div>
+    <div id="root">
+      <!-- SEO-fallback контент для поисковых ботов (удаляется React после гидрации) -->
+      <noscript>
+        <h1>Дело Вкуса — торты на заказ во Владивостоке и кондитерские курсы онлайн</h1>
+        <p>Для работы сайта необходимо включить JavaScript.</p>
+      </noscript>
+      <div id="seo-fallback" style="max-width: 960px; margin: 0 auto; padding: 40px 20px; font-family: system-ui, -apple-system, sans-serif; color: #333;">
+        <h1 style="font-size: 32px; margin-bottom: 16px;">Дело Вкуса — торты на заказ во Владивостоке</h1>
+        <p style="font-size: 18px; line-height: 1.6; margin-bottom: 24px;">
+          Авторские торты на заказ во Владивостоке от <strong>3 300 ₽/кг</strong>. 
+          Изготавливаем 3D торты, ярусные свадебные торты, шоколадные бомбы, тарты, капкейки, 
+          птичье молоко, профитроли, трайфлы и другие десерты. 
+          Доставка по всему Владивостоку. Телефон: <a href="tel:+79242337906">+7 (924) 233-79-06</a>.
+        </p>
+        <h2 style="font-size: 24px; margin-bottom: 12px;">Кондитерские курсы онлайн от Ирины Гордеевой</h2>
+        <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+          Обучающие видео-курсы с постоянным доступом: 
+          «Лепестками роз» (шоколадные цветы), «Финишный крем», «Ваза с цветами», 
+          «Остров» (3D торт), «Пластичный шоколад». Подходят новичкам и практикующим кондитерам.
+        </p>
+        <ul style="font-size: 16px; line-height: 1.8;">
+          <li><a href="/">Каталог тортов на заказ</a></li>
+          <li><a href="/courses">Все кондитерские курсы</a></li>
+          <li><a href="/courses/roses">Курс «Лепестками роз»</a></li>
+          <li><a href="/courses/cream">Курс «Финишный крем»</a></li>
+          <li><a href="/courses/vase">Курс «Ваза с цветами»</a></li>
+          <li><a href="/courses/ostrov">Курс «Остров» (3D торт)</a></li>
+          <li><a href="/courses/plastic-chocolate">Курс «Пластичный шоколад»</a></li>
+        </ul>
+        <p style="font-size: 14px; color: #888; margin-top: 32px;">Загрузка приложения...</p>
+      </div>
+    </div>
     <script>
       // Немедленная предзагрузка изображений
       window.addEventListener("DOMContentLoaded", () => {

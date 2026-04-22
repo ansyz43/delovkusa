@@ -14,6 +14,7 @@ import {
 import { Button } from "./ui/button";
 import BuyCourseButton from "./BuyCourseButton";
 import CategoryGallery from "./CategoryGallery";
+import SEO from "./SEO";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -66,8 +67,94 @@ const CoursePageLayout = ({
         ? "Средний уровень"
         : "Продвинутый";
 
+  // SEO metadata по courseId
+  const courseSEO: Record<string, { title: string; description: string; keywords: string; ogImage: string }> = {
+    roses: {
+      title: "Курс «Лепестками роз» — шоколадные цветы онлайн",
+      description: "Научитесь создавать 18 видов шоколадных цветов: Мондиаль, Остина, Катана, махровые и быстрые розы. 50+ видео, подходит новичкам. Постоянный доступ за 6 900 ₽",
+      keywords: "курс шоколадные цветы, пластичный шоколад курс, розы из шоколада курс, цветы для торта курс, обучение шоколадным цветам",
+      ogImage: "https://delovkusa.site/roza2.jpg"
+    },
+    cream: {
+      title: "Курс «Финишный крем» — выравнивание тортов",
+      description: "9 модулей по финишному крему: рецепты, велюр, выравнивание квадратных тортов, крем-дамба, сборка ярусов. Для начинающих кондитеров. 4 500 ₽",
+      keywords: "курс финишный крем, выравнивание торта курс, велюр курс, крем для торта курс, сборка ярусных тортов",
+      ogImage: "https://delovkusa.site/cre1.jpg"
+    },
+    vase: {
+      title: "Курс «Ваза с цветами» — торт-ваза из шоколада",
+      description: "21 модуль: от черничного бисквита до готовой вазы с 7 видами цветов. Рецепты, финишный крем, велюр. Полный цикл создания. 5 900 ₽",
+      keywords: "курс торт ваза, ваза с цветами курс, шоколадная ваза курс, торт ваза из шоколада",
+      ogImage: "https://delovkusa.site/vaza1.jpg"
+    },
+    ostrov: {
+      title: "Курс «Остров» — 3D торт из пластичного шоколада",
+      description: "Создайте эффектный 3D торт «Остров»: рецепты бисквита и начинки, финишный крем, пластичный шоколад, лепка пальм и декора. 6 500 ₽",
+      keywords: "курс 3d торт, остров торт курс, 3д торт из шоколада, пластичный шоколад 3д",
+      ogImage: "https://delovkusa.site/ostrov.jpg"
+    },
+    "plastic-chocolate": {
+      title: "Курс «Пластичный шоколад» — основы и техники",
+      description: "Полный курс по работе с пластичным шоколадом: рецепты (белый, темный, цветной), лепка фигурок, декор для тортов. От основ до сложных техник. 5 900 ₽",
+      keywords: "курс пластичный шоколад, шоколадная пластика курс, лепка из шоколада курс, фигурки из шоколада",
+      ogImage: "https://delovkusa.site/plastic-chocolate.jpg"
+    }
+  };
+
+  const seo = courseSEO[courseId] || {
+    title,
+    description,
+    keywords: "кондитерские курсы онлайн",
+    ogImage: image
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        keywords={seo.keywords}
+        ogImage={seo.ogImage}
+        type="product"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": title,
+            "description": description,
+            "provider": {
+              "@type": "Person",
+              "name": "Ирина Гордеева",
+              "jobTitle": "Кондитер-преподаватель"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": price.replace(/[^\d]/g, ''),
+              "priceCurrency": "RUB",
+              "availability": "https://schema.org/InStock",
+              "url": `https://delovkusa.site/courses/${courseId}`
+            },
+            "educationalLevel": levelLabel,
+            "inLanguage": "ru-RU",
+            "image": seo.ogImage,
+            "url": `https://delovkusa.site/courses/${courseId}`,
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online",
+              "courseWorkload": "PT10H"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://delovkusa.site/" },
+              { "@type": "ListItem", "position": 2, "name": "Кондитерские курсы", "item": "https://delovkusa.site/courses" },
+              { "@type": "ListItem", "position": 3, "name": title, "item": `https://delovkusa.site/courses/${courseId}` }
+            ]
+          }
+        ]}
+      />
       {/* ═══════════════ HEADER ═══════════════ */}
       <motion.header
         initial={{ y: -100 }}

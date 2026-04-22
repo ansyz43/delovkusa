@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import SEO from "./SEO";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import { apiFetch } from "../lib/api";
@@ -111,6 +112,7 @@ const AdminPanel: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-purple-50">
+      <SEO title="Панель администратора" description="Админ-панель" noindex />
       <Header />
       <main className="pt-28 pb-16 px-4">
         <div className="max-w-7xl mx-auto">

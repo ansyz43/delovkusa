@@ -19,6 +19,7 @@ import { GradientText } from "./ui/gradient-text";
 import { useAuth } from "../lib/AuthContext";
 import TechCardsCatalog from "./TechCardsCatalog";
 import BundleCatalog from "./BundleCatalog";
+import SEO from "./SEO";
 
 // ==========================================
 // Animation variants
@@ -150,6 +151,86 @@ const Home = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
+      <SEO
+        title="Кондитерские курсы онлайн от Ирины Гордеевой"
+        description="Онлайн-курсы по кондитерскому мастерству: пластичный шоколад, шоколадные цветы, финишный крем, торты-вазы. Видео-уроки с постоянным доступом. От 4 500 ₽. Начните прямо сейчас!"
+        keywords="кондитерские курсы онлайн, курсы кондитера, пластичный шоколад курс, шоколадные цветы курс, финишный крем курс, обучение кондитера онлайн, курсы для кондитеров"
+        ogImage="https://delovkusa.site/roza2.jpg"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            "name": "Дело Вкуса - Кондитерские курсы",
+            "description": "Онлайн-курсы по кондитерскому мастерству от Ирины Гордеевой",
+            "url": "https://delovkusa.site/courses",
+            "logo": "https://delovkusa.site/logo.png",
+            "provider": {
+              "@type": "Person",
+              "name": "Ирина Гордеева",
+              "jobTitle": "Кондитер-преподаватель"
+            },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://delovkusa.site/courses?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://delovkusa.site/" },
+              { "@type": "ListItem", "position": 2, "name": "Кондитерские курсы", "item": "https://delovkusa.site/courses" }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Нужен ли опыт чтобы начать кондитерский курс?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Нет, все курсы построены от простого к сложному. Подходят новичкам и практикующим кондитерам — материал объясняется пошагово."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Сколько времени доступен курс после покупки?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Доступ к видео-урокам — постоянный. Купив курс один раз, вы сможете пересматривать его сколько угодно и в любое время."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Выдаёте ли вы сертификат?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Курсы ориентированы на практический результат. Главная ценность — рецепты и техники, которые вы сможете применять и монетизировать."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Как происходит оплата курса?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Оплата онлайн картой через защищённый сервис ЮKassa. После оплаты доступ к курсу открывается автоматически в личном кабинете."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Можно ли задать вопрос преподавателю?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Да, Ирина Гордеева отвечает на вопросы учеников. Также есть комьюнити, где можно делиться результатами и получать обратную связь."
+                }
+              }
+            ]
+          }
+        ]}
+      />
       {/* ═══════════════════════════ HEADER ═══════════════════════════ */}
       <motion.header
         initial={{ y: -100 }}

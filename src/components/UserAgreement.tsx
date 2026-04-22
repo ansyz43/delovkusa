@@ -2,10 +2,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Header from "./Header";
+import SEO from "./SEO";
 
 const UserAgreement = () => {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
+      <SEO title="Пользовательское соглашение" description="Пользовательское соглашение платформы Дело Вкуса" />
       <Header />
       <main className="flex-1 py-8 md:py-12 px-4">
         <motion.div

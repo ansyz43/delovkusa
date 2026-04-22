@@ -24,6 +24,7 @@ import CakeCalculator from "./CakeCalculator";
 import CategoryGallery from "./CategoryGallery";
 import FlipWords from "./FlipWords";
 import { useAuth } from "../lib/AuthContext";
+import SEO from "./SEO";
 
 // ==========================================
 // Animation variants
@@ -329,6 +330,95 @@ const CakeShop = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
+      <SEO
+        title="Торты на заказ во Владивостоке"
+        description="Авторские торты на заказ во Владивостоке от 3 300 ₽/кг. 3D торты, ярусные конструкции, шоколадные бомбы, тарты, капкейки. Доставка. Кондитерская Дело Вкуса — звоните +7 (924) 233-79-06"
+        keywords="торты на заказ владивосток, торт владивосток, кондитерская владивосток, заказать торт владивосток, торт на заказ, свадебный торт владивосток, детский торт владивосток, торты владивосток цены"
+        ogImage="https://delovkusa.site/cakes/medium-decor/1.jpg"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://delovkusa.site/#business",
+            "name": "Дело Вкуса",
+            "description": "Кондитерская во Владивостоке. Торты на заказ, шоколадные десерты, кондитерские курсы",
+            "image": "https://delovkusa.site/logo.png",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Владивосток",
+              "addressCountry": "RU"
+            },
+            "telephone": "+7-924-233-79-06",
+            "priceRange": "3300-5000 ₽/кг",
+            "url": "https://delovkusa.site",
+            "sameAs": ["https://instagram.com/ira.gordeeva_"],
+            "openingHours": "Mo-Su 09:00-20:00",
+            "makesOffer": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Торты на заказ",
+                  "description": "Авторские торты любой сложности"
+                }
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Сколько стоит торт на заказ во Владивостоке?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Стоимость начинается от 3 300 ₽/кг. Итоговая цена зависит от сложности декора, начинки и веса. Точную стоимость рассчитаем после обсуждения деталей."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "За сколько дней нужно заказывать торт?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Простые торты — за 3-5 дней, сложные 3D и свадебные — за 7-14 дней. Чем раньше вы обратитесь, тем больше шансов получить нужную дату."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Есть ли доставка тортов по Владивостоку?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Да, доставляем по всему Владивостоку. Стоимость доставки рассчитывается индивидуально в зависимости от района."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Какие начинки можно выбрать?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Классические и авторские: ванильно-клубничная, шоколадно-ореховая, фисташка-малина, сырный крем с ягодами, карамель с солёным арахисом и другие."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Можно ли заказать торт на свадьбу или детский праздник?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Да, изготавливаем свадебные ярусные торты, детские 3D торты с фигурками, торты-бомбы, тарты, капкейки и другие десерты под любой повод."
+                }
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://delovkusa.site",
+            "name": "Дело Вкуса",
+            "inLanguage": "ru-RU"
+          }
+        ]}
+      />
       {/* ═══════════════════════════ HEADER ═══════════════════════════ */}
       <motion.header
         initial={{ y: -100 }}

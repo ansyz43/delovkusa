@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import Header from "./Header";
+import SEO from "./SEO";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import {
@@ -34,6 +35,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-background via-background to-muted/20">
+      <SEO title="Личный кабинет" description="Личный кабинет ученика платформы Дело Вкуса" noindex />
       <Header />
 
       <main className="flex-1 py-8 md:py-12 px-4">
