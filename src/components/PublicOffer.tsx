@@ -344,7 +344,7 @@ const PublicOffer = () => {
                   kisuke43@gmail.com
                 </a>
               </p>
-              <p>Телефон: +7 942 337-90-6</p>
+              <p>Телефон: <a href="tel:+79242337906" className="text-pink-600 hover:underline">+7 (924) 233-79-06</a></p>
               <p>
                 Сайт:{" "}
                 <a
