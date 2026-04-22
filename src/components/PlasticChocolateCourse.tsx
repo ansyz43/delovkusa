@@ -11,7 +11,7 @@ const PlasticChocolateCourse = () => (
       "На курсе вы узнаете рецепт пластичного шоколада, научитесь создавать пышную розу и нежные фиалки.",
       "Все видео-уроки доступны в вашем личном кабинете с постоянным доступом.",
     ]}
-    price="3000₽"
+    price="3500₽"
     level="Beginner"
     image="/courses/roses/rozaroza (1).jpg"
     learnHref="/dashboard/courses/plastic-chocolate/learn"

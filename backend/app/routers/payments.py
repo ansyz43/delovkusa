@@ -12,6 +12,7 @@ from app.models import Course, Order, UserCourseAccess, User
 from app.auth import get_current_user
 from app.schemas import CreatePaymentRequest, CreatePaymentResponse, OrderStatusResponse
 from app.email_utils import send_payment_success_email_async
+from app.seed import BUNDLES_MAP
 
 router = APIRouter(prefix="/api/payments", tags=["payments"])
 logger = logging.getLogger(__name__)
@@ -155,6 +156,22 @@ async def yookassa_webhook(request: Request, db: AsyncSession = Depends(get_db))
                 course_id=order.course_id,
                 order_id=order.id,
             ))
+
+        # Если это комплект — раздать доступ ко всем входящим курсам (идемпотентно)
+        if order.course_id in BUNDLES_MAP:
+            for sub_course_id in BUNDLES_MAP[order.course_id]:
+                sub_existing = await db.execute(
+                    select(UserCourseAccess).where(
+                        UserCourseAccess.user_id == order.user_id,
+                        UserCourseAccess.course_id == sub_course_id,
+                    )
+                )
+                if not sub_existing.scalar_one_or_none():
+                    db.add(UserCourseAccess(
+                        user_id=order.user_id,
+                        course_id=sub_course_id,
+                        order_id=order.id,
+                    ))
         await db.commit()
         logger.info("Access granted: user=%s course=%s order=%s", order.user_id, order.course_id, order.id)
 
@@ -211,6 +228,21 @@ async def get_order_status(
                             course_id=order.course_id,
                             order_id=order.id,
                         ))
+                    # Комплект — раздать вложенные курсы
+                    if order.course_id in BUNDLES_MAP:
+                        for sub_course_id in BUNDLES_MAP[order.course_id]:
+                            sub_existing = await db.execute(
+                                select(UserCourseAccess).where(
+                                    UserCourseAccess.user_id == order.user_id,
+                                    UserCourseAccess.course_id == sub_course_id,
+                                )
+                            )
+                            if not sub_existing.scalar_one_or_none():
+                                db.add(UserCourseAccess(
+                                    user_id=order.user_id,
+                                    course_id=sub_course_id,
+                                    order_id=order.id,
+                                ))
                     await db.commit()
                 elif yk_payment.status == "canceled":
                     order.status = "canceled"

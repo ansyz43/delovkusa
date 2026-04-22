@@ -18,6 +18,7 @@ import { Button } from "./ui/button";
 import { GradientText } from "./ui/gradient-text";
 import { useAuth } from "../lib/AuthContext";
 import TechCardsCatalog from "./TechCardsCatalog";
+import BundleCatalog from "./BundleCatalog";
 
 // ==========================================
 // Animation variants
@@ -44,7 +45,8 @@ const courses = [
     title: "Курс «Лепестками роз»",
     description:
       "18 видов цветов: Мондиаль, Остина, Катана, махровая и быстрые розы. 50+ видео, раздел для новичков.",
-    price: "5 000 ₽",
+    price: "6 900 ₽",
+    oldPrice: "9 900 ₽",
     image: "/roza2.jpg",
     href: "/courses/roses",
     level: "Для начинающих",
@@ -55,7 +57,8 @@ const courses = [
     title: "Курс «Финишный крем»",
     description:
       "9 модулей: два рецепта крема, велюр, крем-дамба, выравнивание квадрата, сборка ярусных тортов.",
-    price: "3 500 ₽",
+    price: "4 500 ₽",
+    oldPrice: "5 900 ₽",
     image: "/cre1.jpg",
     href: "/courses/cream",
     level: "Для начинающих",
@@ -66,7 +69,8 @@ const courses = [
     title: "Курс «Ваза с цветами»",
     description:
       "21 модуль — от черничного бисквита до готовой вазы с 7 видами цветов. Рецепты, финишный крем и велюр.",
-    price: "4 000 ₽",
+    price: "5 900 ₽",
+    oldPrice: "7 900 ₽",
     image: "/vaza1.jpg",
     href: "/courses/vase",
     level: "Для начинающих",
@@ -77,7 +81,8 @@ const courses = [
     title: "Курс «Остров»",
     description:
       "12 модулей: шифоновый бисквит, вишня фламбе, море из ганаша, черепаха из изомальта. Бонус: картошка и кейкпопсы.",
-    price: "4 500 ₽",
+    price: "5 500 ₽",
+    oldPrice: "6 900 ₽",
     image: "/ostrov.jpg",
     href: "/courses/ostrov",
     level: "Средний уровень",
@@ -88,7 +93,8 @@ const courses = [
     title: "Курс «Пластичный шоколад»",
     description:
       "4 рецепта (белый, тёмный, клубничный, Руби), пищевой клей, список инструментов и галерея 16 работ.",
-    price: "3 000 ₽",
+    price: "3 500 ₽",
+    oldPrice: "4 500 ₽",
     image: "/courses/roses/rozaroza (1).jpg",
     href: "/courses/plastic-chocolate",
     level: "Для начинающих",
@@ -385,7 +391,14 @@ const Home = () => {
                     <h3 className="text-lg font-bold">{course.title}</h3>
                     <p className="text-sm text-muted-foreground line-clamp-2">{course.description}</p>
                     <div className="flex items-center justify-between pt-2">
-                      <span className="text-lg font-bold text-pink-600">{course.price}</span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-pink-600">{course.price}</span>
+                        {course.oldPrice && (
+                          <span className="text-sm text-gray-400 line-through">
+                            {course.oldPrice}
+                          </span>
+                        )}
+                      </div>
                       <Button variant="ghost" size="sm" className="rounded-full text-pink-600 hover:text-pink-700 hover:bg-pink-50 group/btn cursor-pointer" asChild>
                         <Link to={course.href}>
                           Подробнее
@@ -399,6 +412,9 @@ const Home = () => {
             </motion.div>
           </motion.div>
         </section>
+
+        {/* ═══════════════════════════ BUNDLES ═══════════════════════════ */}
+        <BundleCatalog />
 
         {/* ═══════════════════════════ TECH CARDS ═══════════════════════════ */}
         <TechCardsCatalog />
