@@ -1,2 +1,2 @@
 To https://github.com/ansyz43/delovkusa.git
-   3d8f830..2e7b4fb  main -> main
+   2e7b4fb..8d87d53  main -> main

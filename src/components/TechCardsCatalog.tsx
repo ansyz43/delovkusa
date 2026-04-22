@@ -14,6 +14,7 @@ interface TechCard {
   highlights: string[];
   price: number;
   priceLabel: string;
+  image?: string;
 }
 
 const techCards: TechCard[] = [
@@ -66,28 +67,31 @@ const techCards: TechCard[] = [
     id: "tc-chernichnye-nochi",
     title: "Торт «Черничные ночи»",
     description:
-      "Авторский торт на 18 см, рассчитан на 4 коржа. Черничный бисквит, кремчиз, сливки 33–35%, ягодный слой. Полная техкарта сборки и стабилизации.",
-    highlights: ["Форма 18 см", "4 коржа", "Черничный акцент"],
+      "Авторский торт на 18 см, рассчитан на 4 коржа. Черничный бисквит, кремчиз с маскарпоне, черничное конфи, пралине и хрустящий слой. Полная техкарта сборки и стабилизации.",
+    highlights: ["Форма 18 см", "4 коржа", "Кремчиз + конфи + пралине"],
     price: 2000,
     priceLabel: "2 000 ₽",
+    image: "/techcards/chernichnye-nochi.jpg",
   },
   {
     id: "tc-tayozhnyj-roman",
     title: "Торт «Таёжный роман»",
     description:
-      "Эффектный торт 18 см с шоколадным бисквитом, кедровым орехом, брусникой и сливочным кремом. Глубокий «лесной» вкус — хит для осенне-зимнего меню.",
-    highlights: ["Форма 18 см", "Кедровый орех + брусника", "Авторский рецепт"],
+      "Эффектный торт 18 см: кедровый бисквит, творожный крем, кремю на белом шоколаде, брусничное компоте и клюквенный мусс. Финишный крем на белом шоколаде + велюр — хит для осенне-зимнего меню.",
+    highlights: ["Форма 18 см", "Кедровый бисквит + брусника", "Мусс + кремю"],
     price: 2000,
     priceLabel: "2 000 ₽",
+    image: "/techcards/tayozhnyj-roman.jpg",
   },
   {
     id: "tc-vishnya-v-shokolade",
     title: "Торт «Вишня в шоколаде»",
     description:
-      "Классика в авторском исполнении: шоколадный бисквит, вишнёвое конфи, сливки 33–35% и бельгийский шоколад Callebaut 54,5%. Идеален для праздничных заказов.",
-    highlights: ["Callebaut 54,5%", "Вишнёвое конфи", "Сливки 33–35%"],
+      "Шоколадный шифоновый бисквит, шоколадный кремчиз с маскарпоне, вишнёвое компоте, карамелизованный грецкий орех и вишнёвое кремю. Финишный крем на тёмном шоколаде Callebaut 54,5%.",
+    highlights: ["Callebaut 54,5%", "Вишнёвое компоте + кремю", "Карамелизованный орех"],
     price: 2000,
     priceLabel: "2 000 ₽",
+    image: "/techcards/vishnya-v-shokolade.jpg",
   },
   {
     id: "tc-tryufel-chernosliv",
@@ -213,8 +217,19 @@ const TechCardsCatalog: React.FC = () => {
               <motion.div
                 key={tc.id}
                 variants={itemFadeIn}
-                className="flex flex-col rounded-3xl border border-muted bg-background p-6 shadow-sm hover:shadow-md hover:border-pink-200 transition-all duration-300"
+                className="flex flex-col rounded-3xl border border-muted bg-background shadow-sm hover:shadow-md hover:border-pink-200 transition-all duration-300 overflow-hidden"
               >
+                {tc.image && (
+                  <div className="aspect-[4/3] w-full overflow-hidden bg-muted/30">
+                    <img
+                      src={tc.image}
+                      alt={tc.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-col flex-grow p-6">
                 <div className="flex items-start gap-3 mb-3">
                   <div className="rounded-2xl bg-pink-50 p-2.5 flex-shrink-0">
                     <FileText className="w-5 h-5 text-pink-600" />
@@ -276,6 +291,7 @@ const TechCardsCatalog: React.FC = () => {
                     </Button>
                   </div>
                 )}
+                </div>
               </motion.div>
             );
           })}
