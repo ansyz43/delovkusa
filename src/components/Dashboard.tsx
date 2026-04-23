@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/AuthContext";
 import Header from "./Header";
 import SEO from "./SEO";
+import ChangePasswordForm from "./ChangePasswordForm";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import {
@@ -162,6 +163,12 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+          {/* Смена пароля — только для email-аккаунтов */}
+          {user?.auth_provider === "email" && (
+            <div className="mt-8">
+              <ChangePasswordForm />
+            </div>
+          )}
         </motion.div>
       </main>
 

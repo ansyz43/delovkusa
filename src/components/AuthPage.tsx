@@ -360,6 +360,17 @@ const AuthPage = () => {
                     {loading ? "Загрузка..." : isLogin ? "Войти" : "Зарегистрироваться"}
                   </Button>
 
+                  {isLogin && (
+                    <div className="text-center">
+                      <Link
+                        to="/forgot-password"
+                        className="text-sm text-pink-600 hover:text-pink-700 font-medium"
+                      >
+                        Забыли пароль?
+                      </Link>
+                    </div>
+                  )}
+
                   <div className="text-center">
                     <p className="text-muted-foreground text-sm">
                       {isLogin ? "Нет аккаунта?" : "Уже есть аккаунт?"}{" "}

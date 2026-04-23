@@ -27,6 +27,8 @@ const AdminPanel = lazy(() => import("./components/AdminPanel"));
 const PublicOffer = lazy(() => import("./components/PublicOffer"));
 const PrivacyPolicy = lazy(() => import("./components/PrivacyPolicy"));
 const UserAgreement = lazy(() => import("./components/UserAgreement"));
+const ForgotPasswordPage = lazy(() => import("./components/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./components/ResetPasswordPage"));
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
         <Route path="/courses/ostrov" element={<OstrovCourse />} />
         <Route path="/courses/plastic-chocolate" element={<PlasticChocolateCourse />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/payment/return" element={<PaymentReturn />} />
         <Route path="/offer" element={<PublicOffer />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
